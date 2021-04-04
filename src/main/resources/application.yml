@@ -1,0 +1,16 @@
+server:
+  port: 8000
+  servlet:
+    contextPath: /api
+spring:
+  data:
+    rest:
+      basePath: /rest
+  datasource:
+    url: jdbc:mariadb://localhost:3306/wolfwr?createDatabaseIfNotExist=true
+    username: root
+    password: SimStudent
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
