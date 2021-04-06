@@ -1,6 +1,7 @@
 package com.ncsu.wolfwr.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table
-public class Store implements Serializable {
+public class Staff implements Serializable {
 	/**
 	 * 
 	 */
@@ -26,36 +29,39 @@ public class Store implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "staff_id")
+	private Integer staffId;
+	
+	@Column(name = "store_id")
 	private Integer storeId;
 	
-	@Column
+	@Column(name = "first_name")
+	private String firstName;
+	
+	@Column(name = "last_name")
+	private String lastName;
+
 	private String address;
+	
+	private String email;
+	
+	@Column(name = "job_title")
+	private String jobTitle;
 	
 	@Column(name = "phone_number")
 	private String phoneNumber;
-
-	public Integer getStoreId() {
-		return storeId;
-	}
-
-	public void setStoreId(Integer storeId) {
-		this.storeId = storeId;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
+	
+	private Integer age;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "employment_start_date")
+	private Date employmentStartDate;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "employment_end_date")
+	private Date employmentEndDate;
+	
+	
+	
 	
 }
