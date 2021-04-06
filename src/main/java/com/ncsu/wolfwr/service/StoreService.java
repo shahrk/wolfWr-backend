@@ -27,6 +27,7 @@ public class StoreService {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
 		store = this.storeRepo.save(store);
+		
 		return store.getStoreId();
 	}
 	
