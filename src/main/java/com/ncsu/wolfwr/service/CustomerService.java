@@ -33,7 +33,7 @@ public class CustomerService {
 	}
 	
 	public Integer createCustomer(Customer customer) {
-		if (customer.getCustomerId() != null && !BasicUtils.isEmpty(customer.getMembershipLevel())) {
+		if (customer.getCustomerId() != null || !BasicUtils.isEmpty(customer.getMembershipLevel())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
 		
