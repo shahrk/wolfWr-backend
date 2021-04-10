@@ -12,34 +12,33 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ncsu.wolfwr.entity.Staff;
-import com.ncsu.wolfwr.service.StaffService;
+import com.ncsu.wolfwr.entity.Transaction;
+import com.ncsu.wolfwr.service.TransactionService;
 
 @RestController
-@RequestMapping("/staff")
-public class StaffController {
-	
+@RequestMapping("/transaction")
+public class TransactionController {
 	@Autowired
-	StaffService staffService;
+	TransactionService transactionService;
 	
 	@GetMapping("/{id}")
-	public Staff getStaffById(@PathVariable("id") Integer staffId) {
-		return staffService.getStaffById(staffId);
+	public Transaction getTransactionById(@PathVariable("id") Integer transactionId) {
+		return transactionService.getTransactionById(transactionId);
 	}
 	
 	@PostMapping("/")
-	public ResponseEntity<Integer> createStaff(@RequestBody Staff staff) {
-		return new ResponseEntity<Integer>(staffService.createStaff(staff), HttpStatus.CREATED);
+	public ResponseEntity<Integer> createTransaction(@RequestBody Transaction transaction) {
+		return new ResponseEntity<Integer>(transactionService.createTransaction(transaction), HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
-	public void updateStaff(@PathVariable("id") Integer staffId, @RequestBody Staff staff) {
-		staffService.updateStaff(staffId, staff);
+	public void updateProduct(@PathVariable("id") Integer transactionId, @RequestBody Transaction transaction) {
+		transactionService.updateTransaction(transactionId, transaction);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteStaff(@PathVariable("id") Integer staffId) {
-		staffService.deleteStaff(staffId);
+	public ResponseEntity<?> deleteProduct(@PathVariable("id") Integer transactionId) {
+		transactionService.deleteTransaction(transactionId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

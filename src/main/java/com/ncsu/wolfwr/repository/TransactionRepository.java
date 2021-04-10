@@ -6,12 +6,11 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.ncsu.wolfwr.entity.Manager;
+import com.ncsu.wolfwr.entity.Transaction;
 
 @Repository
-public interface ManagerRepository extends JpaRepository<Manager, Integer>{
-
-	List<Manager> findAll();
+public interface TransactionRepository extends JpaRepository<Transaction, Integer>{
+	List<Transaction> findAll();
 	
-	Optional<Manager> findById(Integer staffId);
+	Optional<Transaction> findById(Integer transactionId);
 }
