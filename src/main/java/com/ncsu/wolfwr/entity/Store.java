@@ -33,29 +33,4 @@ public class Store implements Serializable {
 	
 	@Column(name = "phone_number")
 	private String phoneNumber;
-
-	public Integer getStoreId() {
-		return storeId;
-	}
-
-	public void setStoreId(Integer storeId) {
-		this.storeId = storeId;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-	
 }
