@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ncsu.wolfwr.entity.Transaction;
 import com.ncsu.wolfwr.service.TransactionService;
 
+import models.TransactionPOJO;
+
 @RestController
 @RequestMapping("/transaction")
 public class TransactionController {
@@ -27,7 +29,7 @@ public class TransactionController {
 	}
 	
 	@PostMapping("/")
-	public ResponseEntity<Integer> createTransaction(@RequestBody Transaction transaction) {
+	public ResponseEntity<Integer> createTransaction(@RequestBody TransactionPOJO transaction) {
 		return new ResponseEntity<Integer>(transactionService.createTransaction(transaction), HttpStatus.CREATED);
 	}
 	
