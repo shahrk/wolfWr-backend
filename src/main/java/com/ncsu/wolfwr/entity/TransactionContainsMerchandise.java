@@ -1,12 +1,9 @@
 package com.ncsu.wolfwr.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
@@ -20,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table
-@IdClass(TransactionContainsMerchandise.class)
+@IdClass(TransactionMerchandiseId.class)
 public class TransactionContainsMerchandise implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
