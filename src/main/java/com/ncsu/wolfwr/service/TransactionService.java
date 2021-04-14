@@ -79,11 +79,10 @@ public class TransactionService {
 			}
 			
 			//update the quantity of the merchandise table of every product
-			merchandiseRepo.updateMerchandiseOnTransaction(product.getQuantity(),transaction.getStoreId(),product.getProductId());
-			Merchandise merchandise = merchandiseRepo.findMerchandiseByProductStoreId(transaction.getStoreId(),product.getProductId());
+			merchandiseRepo.updateMerchandiseOnTransaction(product.getQuantity(),product.getMerchandiseId());
 			
 			TransactionContainsMerchandise obj = new TransactionContainsMerchandise();
-			obj.setMerchandiseId(merchandise.getMerchandiseId());
+			obj.setMerchandiseId(product.getMerchandiseId());
 			obj.setTransactionId(transaction.getTransactionId());
 			obj.setQuantity(product.getQuantity());
 			this.transactionContainsMerchandiseRepo.save(obj);
