@@ -44,7 +44,7 @@ public class ShipmentController {
 		shipmentService.updateStoreShipment(shipmentId, storeShipment);
 	}
 	
-	@PutMapping("/store/{id}")
+	@PutMapping("/supplier/{id}")
 	public void updateSupplierShipment(@PathVariable("id") Integer shipmentId, @RequestBody SupplierShipmentPOJO supplierShipment) {
 		shipmentService.updateSupplierShipment(shipmentId, supplierShipment);
 	}

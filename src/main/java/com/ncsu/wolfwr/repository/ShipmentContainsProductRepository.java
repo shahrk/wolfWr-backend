@@ -16,5 +16,5 @@ public interface ShipmentContainsProductRepository  extends JpaRepository<Shipme
 	
 	Optional<ShipmentContainsProduct> findById(ShipmentProductId shipmentProductId);
 	
-	List<ShipmentContainsProduct> findByShipmentIdId(Integer shipmentId);
+	List<ShipmentContainsProduct> findByShipmentId(Integer shipmentId);
 }
