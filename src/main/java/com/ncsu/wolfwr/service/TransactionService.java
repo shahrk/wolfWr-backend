@@ -11,7 +11,6 @@ import org.springframework.web.server.ResponseStatusException;
 import com.ncsu.wolfwr.entity.Customer;
 import com.ncsu.wolfwr.entity.Discount;
 import com.ncsu.wolfwr.entity.MembershipTier;
-import com.ncsu.wolfwr.entity.Merchandise;
 import com.ncsu.wolfwr.entity.PaymentMethod;
 import com.ncsu.wolfwr.entity.Transaction;
 import com.ncsu.wolfwr.entity.TransactionContainsMerchandise;
