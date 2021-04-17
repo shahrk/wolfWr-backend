@@ -17,6 +17,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.ncsu.wolfwr.entity.Return;
 import com.ncsu.wolfwr.entity.ReturnContainsMerchandise;
+import com.ncsu.wolfwr.entity.TransactionContainsMerchandise;
+import com.ncsu.wolfwr.entity.TransactionMerchandiseId;
 import com.ncsu.wolfwr.repository.MerchandiseRepository;
 import com.ncsu.wolfwr.repository.ReturnContainsMerchandiseRepository;
 import com.ncsu.wolfwr.repository.ReturnRepository;
@@ -24,6 +26,7 @@ import com.ncsu.wolfwr.repository.TransactionContainsMerchandiseRepository;
 import com.ncsu.wolfwr.repository.TransactionRepository;
 
 import models.ReturnPOJO;
+import models.ReturnResponse;
 
 @Service
 public class ReturnService {
@@ -47,7 +50,8 @@ public class ReturnService {
 	
 	// demo this, show a create for return and show how it gets rejected in certain scenarios
 	@Transactional
-	public int createReturn(ReturnPOJO returnPojo) {
+	public ReturnResponse createReturn(ReturnPOJO returnPojo) {
+		ReturnResponse returnResp = new ReturnResponse();
 		Return returns = returnPojo.getReturns();
 		if (returns == null || returns.getReturnId() != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -57,6 +61,7 @@ public class ReturnService {
 		List<ReturnContainsMerchandise> returnedMerch = new ArrayList<ReturnContainsMerchandise>();
 		List<Integer> transactionMerch = transactionContainsMerchRepo.getMerchandiseByTransaction(returns.getTransactionId());
 		Set<Integer> merchSet = new HashSet<Integer>(transactionMerch);
+		float returnAmount = (float) 0.0;
 		for (Entry<Integer, Integer> merchCount: merchCountMap.entrySet()) {
 			if (!merchSet.contains(merchCount.getKey())) {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -65,9 +70,16 @@ public class ReturnService {
 																	merchCount.getKey(), 
 																	merchCount.getValue()));
 			merchRepo.addMerchandiseStock(merchCount.getKey(), merchCount.getValue());
+			TransactionMerchandiseId transactionMerchandiseId = new TransactionMerchandiseId();
+			transactionMerchandiseId.setTransactionId(returns.getTransactionId());
+			transactionMerchandiseId.setMerchandiseId(merchCount.getKey());
+			TransactionContainsMerchandise transactionContainsMerch = transactionContainsMerchRepo.findById(transactionMerchandiseId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+			returnAmount += transactionContainsMerch.getDiscountedPrice() * merchCount.getValue();
 		}
 		returnContainsMerchRepo.saveAll(returnedMerch);
-		return returns.getReturnId();
+		returnResp.setReturnId(returns.getReturnId());
+		returnResp.setReturnAmount(returnAmount);
+		return returnResp;
 	}
 	
 	@Transactional

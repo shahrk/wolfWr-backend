@@ -10,7 +10,6 @@ import lombok.Data;
 public class TransactionPOJO {
 	
 	private Transaction transactionDetails;
-	private List<ProductsDetailsJSON> productsList;
-
+	private List<TransactionMerchandiseDetails> merchList;
 	
 }

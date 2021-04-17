@@ -26,6 +26,8 @@ public class TransactionContainsMerchandise{
 	@Column(name = "merchandise_id")
 	private Integer merchandiseId;
 	
+	private Float discountedPrice;
+	
 	private Integer quantity;
 	
 }

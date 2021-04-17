@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.ncsu.wolfwr.entity.Customer;
 import com.ncsu.wolfwr.entity.Discount;
 import com.ncsu.wolfwr.entity.MembershipTier;
+import com.ncsu.wolfwr.entity.Merchandise;
 import com.ncsu.wolfwr.entity.PaymentMethod;
 import com.ncsu.wolfwr.entity.Transaction;
 import com.ncsu.wolfwr.entity.TransactionContainsMerchandise;
@@ -21,7 +22,7 @@ import com.ncsu.wolfwr.repository.MerchandiseRepository;
 import com.ncsu.wolfwr.repository.TransactionContainsMerchandiseRepository;
 import com.ncsu.wolfwr.repository.TransactionRepository;
 
-import models.ProductsDetailsJSON;
+import models.TransactionMerchandiseDetails;
 import models.TransactionPOJO;
 import utility.BasicUtils;
 
@@ -67,23 +68,25 @@ public class TransactionService {
 		
 		transaction = this.transactionRepo.save(transaction);
 		
-		for(ProductsDetailsJSON product : transactionObj.getProductsList()) {
+		for(TransactionMerchandiseDetails merchDetails : transactionObj.getMerchList()) {
 			
+			Merchandise merch = merchandiseRepo.findById(merchDetails.getMerchandiseId()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 			//Calculating total price to be saved in transaction table with discount
-			Discount discount = discountRepo.findDiscountByProductId(product.getProductId());
+			Discount discount = discountRepo.findDiscountByProductId(merch.getProductId());
+			float discounted_price = merch.getMarketPrice();
 			if((!BasicUtils.isEmpty(discount)) && (discount.getDiscountStartDate().getTime() <=  currentDate.getTime()) && (discount.getDiscountExpirationDate().getTime() >= currentDate.getTime())) {
-				sum += (product.getTotalPrice() - ((discount.getDiscountPercentage()/100)*product.getTotalPrice()));
-			}else {
-				sum += product.getTotalPrice();
+				discounted_price = (100 - discount.getDiscountPercentage()) / 100 * merch.getMarketPrice();
 			}
+			sum += discounted_price * merchDetails.getQuantity();
 			
 			//update the quantity of the merchandise table of every product
-			merchandiseRepo.updateMerchandiseOnTransaction(product.getQuantity(),product.getMerchandiseId());
+			merchandiseRepo.updateMerchandiseOnTransaction(merchDetails.getQuantity(),merchDetails.getMerchandiseId());
 			
 			TransactionContainsMerchandise obj = new TransactionContainsMerchandise();
-			obj.setMerchandiseId(product.getMerchandiseId());
+			obj.setMerchandiseId(merchDetails.getMerchandiseId());
 			obj.setTransactionId(transaction.getTransactionId());
-			obj.setQuantity(product.getQuantity());
+			obj.setDiscountedPrice(discounted_price);
+			obj.setQuantity(merchDetails.getQuantity());
 			this.transactionContainsMerchandiseRepo.save(obj);
 			
 		}

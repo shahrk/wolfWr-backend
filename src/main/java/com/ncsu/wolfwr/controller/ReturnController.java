@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.ncsu.wolfwr.service.ReturnService;
 
 import models.ReturnPOJO;
+import models.ReturnResponse;
 
 @RestController
 @RequestMapping("/return")
@@ -29,8 +30,8 @@ public class ReturnController {
 	}
 
 	@PostMapping("/")
-	public ResponseEntity<Integer> createReturn(@RequestBody ReturnPOJO returnPojo) {
-		return new ResponseEntity<Integer>(returnService.createReturn(returnPojo), HttpStatus.CREATED);
+	public ResponseEntity<ReturnResponse> createReturn(@RequestBody ReturnPOJO returnPojo) {
+		return new ResponseEntity<ReturnResponse>(returnService.createReturn(returnPojo), HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
