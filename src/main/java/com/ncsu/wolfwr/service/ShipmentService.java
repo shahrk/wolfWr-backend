@@ -69,14 +69,13 @@ public class ShipmentService {
 		List<ShipmentContainsProduct> shipmentProducts = new ArrayList<ShipmentContainsProduct>();
 		products.stream().forEach((product) -> {
 			shipmentProducts.add(new ShipmentContainsProduct(shipmentId, product));
-			updateOrCreateMerchandise(product);
+			updateMerchandise(product);
 		});
 		this.shipmentContainsProductRepo.saveAll(shipmentProducts);
 	}
 	
-	private void updateOrCreateMerchandise(ProductsDetailsJSON product) {
-		// TODO Add logic to create merchandise if product details don't match existing merchandise 
-		// or update stock if it does
+	private void updateMerchandise(ProductsDetailsJSON product) {
+		merchandiseRepo.addMerchandiseStock(product.getMerchandiseId(), product.getQuantity());
 	}
 	
 	public void updateStoreShipment(Integer id, StoreShipmentPOJO storeShipmentPojo) {

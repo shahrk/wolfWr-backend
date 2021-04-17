@@ -64,7 +64,7 @@ public class ReturnService {
 			returnedMerch.add(new ReturnContainsMerchandise(returns.getReturnId(), 
 																	merchCount.getKey(), 
 																	merchCount.getValue()));
-			merchRepo.updateMerchandiseOnReturn(merchCount.getKey(), merchCount.getValue());
+			merchRepo.addMerchandiseStock(merchCount.getKey(), merchCount.getValue());
 		}
 		returnContainsMerchRepo.saveAll(returnedMerch);
 		return returns.getReturnId();
@@ -84,7 +84,7 @@ public class ReturnService {
 																	merchCount.getKey(), 
 																	merchCount.getValue()));
 			int old_qty = returnContainsMerchRepo.getQuantityOfReturnedMerch(returns.getReturnId(), merchCount.getKey());
-			merchRepo.updateMerchandiseOnReturn(merchCount.getKey(), merchCount.getValue() - old_qty);
+			merchRepo.addMerchandiseStock(merchCount.getKey(), merchCount.getValue() - old_qty);
 		}
 		returnContainsMerchRepo.saveAll(returnedMerch);
 	}

@@ -29,5 +29,5 @@ public interface MerchandiseRepository extends JpaRepository<Merchandise, Intege
 	@Transactional
 	@Modifying(clearAutomatically = true)
 	@Query("UPDATE Merchandise m SET m.quantityInStock= m.quantityInStock + :quantity  WHERE m.merchandiseId = :merchId")
-	void updateMerchandiseOnReturn(@Param(value = "merchId") Integer merchId, @Param(value = "quantity") Integer quantity);
+	void addMerchandiseStock(@Param(value = "merchId") Integer merchId, @Param(value = "quantity") Integer quantity);
 }
