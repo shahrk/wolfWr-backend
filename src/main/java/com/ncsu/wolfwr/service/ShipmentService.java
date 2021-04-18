@@ -124,6 +124,14 @@ public class ShipmentService {
 			merchandiseRepo.addMerchandiseStock(merch.getMerchandiseId(), product.getQuantity());
 		} else {
 			merch = new Merchandise();
+			merch.setBuyPrice(product.getBuyPrice());
+			merch.setExpirationDate(product.getExpirationDate());
+			merch.setMarketPrice(product.getMarketPrice());
+			merch.setProductId(product.getProductId());
+			merch.setProductionDate(product.getProductionDate());
+			merch.setQuantityInStock(product.getQuantity());
+			merch.setStoreId(receivingStoreId);
+			merch.setSupplierId(supplierId);
 			merchService.createMerchandise(merch);
 		}
 	}

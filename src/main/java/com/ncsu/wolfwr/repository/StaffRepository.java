@@ -17,6 +17,6 @@ public interface StaffRepository extends JpaRepository<Staff, Integer>{
 	
 	Optional<Staff> findById(Integer staffId);
 	
-	@Query("Select s from Staff s where s.storeId = :storeId and s.jobTitle = 'billing_operator")
+	@Query("Select s from Staff s where s.storeId = :storeId and s.jobTitle = 'billing_operator'")
 	List<Staff> getBillingOperatorByStore(@Param("storeId") Integer storeId);
 }
