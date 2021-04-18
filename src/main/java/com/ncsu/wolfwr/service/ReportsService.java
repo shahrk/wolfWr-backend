@@ -1,5 +1,6 @@
 package com.ncsu.wolfwr.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,10 @@ public class ReportsService {
 	
 	public List<Object> salesReportYear() {
 		return transactionRepo.getSalesReportYear();
+	}
+	
+	public List<Object> salesReportStore(Integer storeId, LocalDate startDate, LocalDate endDate) {
+		return transactionRepo.getSalesReportStore( storeId,  startDate,  endDate);
 	}
 	
 	
