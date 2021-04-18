@@ -39,6 +39,11 @@ public class CustomerController {
 		customerService.updateCustomer(customerId, customer);
 	}
 	
+	@PostMapping("/{id}/cancelmembership")
+	public void cancelMembership(@PathVariable("id") Integer customerId) {
+		customerService.cancelMembershio(customerId);
+	}
+	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteCustomer(@PathVariable("id") Integer customerId) {
 		customerService.deleteCustomer(customerId);

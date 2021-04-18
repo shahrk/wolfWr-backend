@@ -65,6 +65,12 @@ public class CustomerService {
 		this.customerRepo.save(customer);
 	}
 	
+	public void cancelMembershio(int id) {
+		Customer customer = this.customerRepo.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
+		customer.setMembershipStatus(false);
+		this.customerRepo.save(customer);
+	}
+	
 	public void deleteCustomer(int id) {
 		this.customerRepo.deleteById(id);
 	}
