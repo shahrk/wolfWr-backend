@@ -1,28 +1,34 @@
 package com.ncsu.wolfwr.service;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.ncsu.wolfwr.entity.Customer;
-import com.ncsu.wolfwr.entity.MembershipTier;
+import com.ncsu.wolfwr.entity.SignupInformation;
 import com.ncsu.wolfwr.repository.CustomerRepository;
 import com.ncsu.wolfwr.repository.MembershipTierRepository;
+import com.ncsu.wolfwr.repository.SignupRepository;
 
+import models.CustomerSignupPOJO;
 import utility.BasicUtils;
 
 @Service
 public class CustomerService {
 	CustomerRepository customerRepo;
 	
+	SignupRepository signupRepo;
 	
 	MembershipTierRepository membershipTierRepo;
 	
 	@Autowired
-	CustomerService(CustomerRepository customerRepo, MembershipTierRepository membershipTierRepo) {
+	CustomerService(CustomerRepository customerRepo, MembershipTierRepository membershipTierRepo, SignupRepository signupRepo) {
 		this.customerRepo = customerRepo;
 		this.membershipTierRepo = membershipTierRepo;
+		this.signupRepo = signupRepo;
 	}
 	
 	
@@ -30,7 +36,9 @@ public class CustomerService {
 		return customerRepo.findById(customerId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 	
-	public Integer createCustomer(Customer customer) {
+	public Integer createCustomer(CustomerSignupPOJO customerPojo) {
+		Customer customer = new Customer(customerPojo);
+		SignupInformation signupInformation = new SignupInformation(customerPojo);
 		if (customer.getCustomerId() != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
@@ -40,6 +48,9 @@ public class CustomerService {
 		}
 		
 		customer = this.customerRepo.save(customer);
+		
+		signupInformation.setCustomerId(customer.getCustomerId());
+		this.signupRepo.save(signupInformation);
 		
 		return customer.getCustomerId();
 	}

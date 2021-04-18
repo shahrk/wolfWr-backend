@@ -13,6 +13,7 @@ import javax.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import models.CustomerSignupPOJO;
 
 @Entity
 @Data
@@ -55,5 +56,15 @@ public class Customer implements Serializable{
 	@Column(name = "membership_amount_paid",columnDefinition = "bool")
 	private Boolean membershipAmountPaid;
 	
-	
+	public Customer(CustomerSignupPOJO c) {
+		this.tierId = c.getTierId();
+		this.firstName = c.getFirstName();
+		this.lastName = c.getLastName();
+		this.emailAddress = c.getEmailAddress();
+		this.phoneNumber = c.getPhoneNumber();
+		this.homeAddress = c.getHomeAddress();
+		this.membershipStatus = c.getMembershipStatus();
+		this.rewardPoints = c.getRewardPoints();
+		this.membershipAmountPaid = c.getMembershipAmountPaid();
+	}
 }

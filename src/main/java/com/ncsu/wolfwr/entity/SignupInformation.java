@@ -15,6 +15,7 @@ import javax.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import models.CustomerSignupPOJO;
 
 @Entity
 @Data
@@ -48,4 +49,11 @@ public class SignupInformation implements Serializable{
 	@Temporal(TemporalType.DATE)
 	@Column(name = "end_date")
 	private Date endDate;
+	
+	public SignupInformation (CustomerSignupPOJO c) {
+		this.storeId = c.getStoreId();
+		this.staffId = c.getStaffId();
+		this.tierId = c.getTierId();
+		this.signupDate = c.getSignupDate();
+	}
 }

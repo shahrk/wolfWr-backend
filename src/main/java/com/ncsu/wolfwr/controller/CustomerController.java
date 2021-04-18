@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ncsu.wolfwr.entity.Customer;
 import com.ncsu.wolfwr.service.CustomerService;
 
+import models.CustomerSignupPOJO;
+
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
@@ -28,7 +30,7 @@ public class CustomerController {
 	}
 	
 	@PostMapping("/")
-	public ResponseEntity<Integer> createCustomer(@RequestBody Customer customer) {
+	public ResponseEntity<Integer> registerCustomer(@RequestBody CustomerSignupPOJO customer) {
 		return new ResponseEntity<Integer>(customerService.createCustomer(customer), HttpStatus.CREATED);
 	}
 	
