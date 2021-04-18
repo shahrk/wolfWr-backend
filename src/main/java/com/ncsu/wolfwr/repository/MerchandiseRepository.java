@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ncsu.wolfwr.entity.Merchandise;
 
+
 @Repository
 public interface MerchandiseRepository extends JpaRepository<Merchandise, Integer>{
 	List<Merchandise> findAll();
@@ -34,4 +35,10 @@ public interface MerchandiseRepository extends JpaRepository<Merchandise, Intege
 	
 	@Query("SELECT m from Merchandise m where m.productId = :productId and m.storeId = :storeId and m.buyPrice = :buyPrice and m.marketPrice = :marketPrice and m.productionDate = :productionDate and m.expirationDate = :expirationDate and m.supplierId = :supplierId")
 	Merchandise getMatchingMerchandise(@Param("productId") Integer productId, @Param("storeId") Integer storeId, @Param("buyPrice") Float buyPrice, @Param("marketPrice") Float marketPrice, @Param("productionDate") Date productionDate, @Param("expirationDate") Date expirationDate, @Param("supplierId") Integer supplierId);
+	
+	@Query(value="select m.product_id, m.merchandise_id, m.expiration_date, sum(m.quantity_in_stock) as quantity_in_stock from merchandise m where m.store_id = :storeId group by m.product_id, m.merchandise_id", nativeQuery=true)
+	List<Object> getInventoryStore(@Param("storeId") Integer storeId);
+	
+	@Query(value="select m.product_id, m.store_id, m.expiration_date, sum(m.quantity_in_stock) as quantity_in_stock from merchandise m group by m.product_id,m.store_id having m.product_id= :productId", nativeQuery=true)
+	List<Object> getInventoryProduct(@Param("productId") Integer productId);
 }

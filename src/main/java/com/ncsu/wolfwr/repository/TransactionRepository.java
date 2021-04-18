@@ -28,5 +28,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 	
 	@Query(value="select initial.sales as initial_sales, final.sales as final_sales,(final.sales - initial.sales)*100/initial.sales as growth from  ( SELECT sum(t.total_price) as sales from transaction t where t.purchase_date <= :startDate and t.store_id = :storeId ) as initial,  (select sum(t.total_price) as sales from transaction t where t.purchase_date <= :endDate and t.store_id = :storeId) as final", nativeQuery=true)
 	List<Object> getSalesReportStore(@Param("storeId") Integer storeId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+	
+	@Query(value="select t.customer_id, sum(t.total_price) as total_purchase_amount from transaction t where t.purchase_date between :startDate and :endDate group by t.customer_id having t.customer_id= :customerId", nativeQuery=true)
+	List<Object> getCustomerActivity(@Param("customerId") Integer customerId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }
 

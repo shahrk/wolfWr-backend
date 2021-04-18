@@ -40,4 +40,28 @@ public class ReportsController {
 		return reportsService.salesReportStore(storeId, startDate, endDate);
 	}
 	
+	@GetMapping("/store/inventory/{id}")
+	public List<Object> inventoryStore(@PathVariable("id") Integer storeId) {
+		
+		return reportsService.inventoryStore(storeId);
+	}
+	
+	@GetMapping("/product/inventory/{id}")
+	public List<Object> inventoryProduct(@PathVariable("id") Integer productId) {
+		
+		return reportsService.inventoryProduct(productId);
+	}
+	
+	@GetMapping("/customer/growth/{startDate}/{endDate}")
+	public List<Object> customerGrowth(@PathVariable("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate, @PathVariable("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+		
+		return reportsService.customerGrowth(startDate, endDate);
+	}
+	
+	@GetMapping("/customer/activity/{id}/{startDate}/{endDate}")
+	public List<Object> customerActivity(@PathVariable("id") Integer customerId, @PathVariable("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate, @PathVariable("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+		
+		return reportsService.customerActivity(customerId, startDate, endDate);
+	}
+	
 }
