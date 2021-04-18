@@ -20,7 +20,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer>{
 	
 	@Transactional
 	@Modifying(clearAutomatically = true)
-	@Query("UPDATE Customer m SET m.rewardsPoints= m.rewardsPoints + :points  WHERE  m.customerId = :customerId")
+	@Query("UPDATE Customer m SET m.rewardPoints= m.rewardPoints + :points  WHERE  m.customerId = :customerId")
 	void updateRewardPointsOnTransaction(@Param(value = "points") Float points, @Param(value = "customerId") Integer customerId);
 	
 }
