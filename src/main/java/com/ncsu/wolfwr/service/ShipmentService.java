@@ -120,6 +120,16 @@ public class ShipmentService {
 		billingRepo.save(bill);
 	}
 	
+	private void updateBill(int shipmentId, List<ShipmentProductDetails> products) {
+		BillingInfo bill = billingRepo.findByShipmentId(shipmentId).orElseThrow();
+		float amount = (float) 0.0;
+		for (ShipmentProductDetails product: products) {
+			amount += product.getBuyPrice()*product.getQuantity();
+		}
+		bill.setAmount(amount);
+		billingRepo.save(bill);
+	}
+	
 	private void createOrUpdateMerchandiseOnSupplierShipment(Integer receivingStoreId, Integer supplierId, ShipmentProductDetails product) {
 		Merchandise merch = merchandiseRepo.getMatchingMerchandise(product.getProductId(), receivingStoreId, product.getBuyPrice(), product.getMarketPrice(), product.getProductionDate(), product.getExpirationDate(), supplierId);
 		if (merch != null) {			
@@ -149,13 +159,16 @@ public class ShipmentService {
 			merch = senderMerch;
 			senderMerch.setStoreId(receivingStoreId);
 			senderMerch.setQuantityInStock(quantity);
-			senderMerch.setMerchandiseId(null);			
+			senderMerch.setMerchandiseId(null);	
 			merchService.createMerchandise(merch);
 		}
 	}
 	
 	public void updateStoreShipment(int id, StoreShipmentPOJO storeShipmentPojo) {
 		Shipment shipment = storeShipmentPojo.getShipmentDetails();
+		if(shipment.getShipmentId() != id) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mismatching Shipment Id");
+		}
 		shipment = this.shipmentRepo.save(shipment);
 		StoreShipment storeShipment = new StoreShipment(storeShipmentPojo);
 		storeShipment = this.storeShipmentRepo.save(storeShipment);
@@ -164,10 +177,14 @@ public class ShipmentService {
 	
 	public void updateSupplierShipment(int id, SupplierShipmentPOJO supplierShipmentPojo) {
 		Shipment shipment = supplierShipmentPojo.getShipmentDetails();
+		if(shipment.getShipmentId() != id) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mismatching Shipment Id");
+		}
 		shipment = this.shipmentRepo.save(shipment);
 		SupplierShipment supplierShipment = new SupplierShipment(supplierShipmentPojo);
 		supplierShipment = this.supplierShipmentRepo.save(supplierShipment);
 		saveSupplierShipmentProducts(supplierShipmentPojo.getSupplierId(), shipment, supplierShipmentPojo.getProductsList());
+		updateBill(shipment.getShipmentId(), supplierShipmentPojo.getProductsList());
 	}
 	
 	public void deleteShipment(int id) {
