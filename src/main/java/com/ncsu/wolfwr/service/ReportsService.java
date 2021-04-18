@@ -2,6 +2,7 @@ package com.ncsu.wolfwr.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,35 +25,35 @@ public class ReportsService {
 		this.signupRepo = signupRepo;
 	}
 	
-	public List<Object> salesReportDay() {
+	public List<Map<Object, Object>> salesReportDay() {
 		return transactionRepo.getSalesReportDay();
 	}
 	
-	public List<Object> salesReportMonth() {
+	public List<Map<Object, Object>> salesReportMonth() {
 		return transactionRepo.getSalesReportMonth();
 	}
 	
-	public List<Object> salesReportYear() {
+	public List<Map<Object, Object>> salesReportYear() {
 		return transactionRepo.getSalesReportYear();
 	}
 	
-	public List<Object> salesReportStore(Integer storeId, LocalDate startDate, LocalDate endDate) {
+	public List<Map<Object, Object>> salesReportStore(Integer storeId, LocalDate startDate, LocalDate endDate) {
 		return transactionRepo.getSalesReportStore( storeId,  startDate,  endDate);
 	}
 	
-	public List<Object> inventoryStore(Integer storeId) {
+	public List<Map<Object, Object>> inventoryStore(Integer storeId) {
 		return merchandiseRepo.getInventoryStore(storeId);
 	}
 	
-	public List<Object> inventoryProduct(Integer productId) {
+	public List<Map<Object, Object>> inventoryProduct(Integer productId) {
 		return merchandiseRepo.getInventoryProduct(productId);
 	}
 	
-	public List<Object> customerGrowth(LocalDate startDate, LocalDate endDate) {
+	public List<Map<Object, Object>> customerGrowth(LocalDate startDate, LocalDate endDate) {
 		return signupRepo.getCustomerGrowth(startDate, endDate);
 	}
 	
-	public List<Object> customerActivity(Integer customerId, LocalDate startDate, LocalDate endDate) {
+	public List<Map<Object, Object>> customerActivity(Integer customerId, LocalDate startDate, LocalDate endDate) {
 		return transactionRepo.getCustomerActivity(customerId, startDate, endDate);
 	}
 }
