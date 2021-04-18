@@ -15,8 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.ncsu.wolfwr.entity.Return;
 import com.ncsu.wolfwr.entity.ReturnContainsMerchandise;
+import com.ncsu.wolfwr.entity.Returns;
 import com.ncsu.wolfwr.entity.TransactionContainsMerchandise;
 import com.ncsu.wolfwr.entity.TransactionMerchandiseId;
 import com.ncsu.wolfwr.repository.MerchandiseRepository;
@@ -52,7 +52,7 @@ public class ReturnService {
 	@Transactional
 	public ReturnResponse createReturn(ReturnPOJO returnPojo) {
 		ReturnResponse returnResp = new ReturnResponse();
-		Return returns = returnPojo.getReturns();
+		Returns returns = returnPojo.getReturns();
 		if (returns == null || returns.getReturnId() != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
@@ -84,7 +84,7 @@ public class ReturnService {
 	
 	@Transactional
 	public void updateReturn(ReturnPOJO returnPojo) {
-		Return returns = returnPojo.getReturns();
+		Returns returns = returnPojo.getReturns();
 		if (returns.getReturnId() == null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
@@ -103,7 +103,7 @@ public class ReturnService {
 	
 	public ReturnPOJO getReturn(int id) {
 		ReturnPOJO retPojo = new ReturnPOJO();
-		Return ret = returnRepo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+		Returns ret = returnRepo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 		retPojo.setReturns(ret);
 		List<ReturnContainsMerchandise> returnedMerch = returnContainsMerchRepo.findByReturnId(ret.getReturnId());
 		Map<Integer,Integer> merchCountMap = new HashMap<Integer,Integer>();
