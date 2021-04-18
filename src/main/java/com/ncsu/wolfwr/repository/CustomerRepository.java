@@ -23,4 +23,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer>{
 	@Query("UPDATE Customer m SET m.rewardPoints= m.rewardPoints + :points  WHERE  m.customerId = :customerId")
 	void updateRewardPointsOnTransaction(@Param(value = "points") Float points, @Param(value = "customerId") Integer customerId);
 	
+	@Query("select sum(t.cashbackReward) as rewards from Transaction t where year(t.purchaseDate) = :year and t.customerId = :customerId")
+	Optional<Float> getRewardPointsByYear(@Param(value = "customerId") int customerId, @Param(value = "year") int year);
+	
 }

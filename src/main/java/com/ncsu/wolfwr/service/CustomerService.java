@@ -1,5 +1,7 @@
 package com.ncsu.wolfwr.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -71,5 +73,24 @@ public class CustomerService {
 	
 	public void deleteCustomer(int id) {
 		this.customerRepo.deleteById(id);
+	}
+	
+	public float getCurrentRewardPoints(int id) {
+		Customer customer = this.customerRepo.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
+		return customer.getRewardPoints();
+	}
+	
+	public float getRewardPoints(int id, Integer year) {
+		if (year == null) {
+			return getCurrentRewardPoints(id);
+		}
+		return this.customerRepo.getRewardPointsByYear(id, year).orElse((float)0.0);
+	}
+	
+	@Transactional
+	public void resetRewardPoints(int id) {
+		Customer customer = this.customerRepo.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
+		customer.setRewardPoints((float)0.0);
+		this.customerRepo.save(customer);
 	}
 }

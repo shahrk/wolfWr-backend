@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ncsu.wolfwr.entity.Customer;
@@ -49,5 +50,15 @@ public class CustomerController {
 		customerService.deleteCustomer(customerId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
+	
+	@GetMapping("/{id}/rewards")
+	public ResponseEntity<Float> getRewardPoints(@RequestParam(name = "year", required = false) Integer year, @PathVariable("id") Integer customerId) {
+		return new ResponseEntity<Float>(customerService.getRewardPoints(customerId, year), HttpStatus.OK);
+	}
 
+	@PostMapping("/{id}/rewards/reset")
+	public ResponseEntity<?>  resetRewardPoints(@PathVariable("id") Integer customerId) {
+		customerService.resetRewardPoints(customerId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }
