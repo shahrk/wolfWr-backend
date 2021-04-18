@@ -3,6 +3,8 @@ package com.ncsu.wolfwr.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -70,6 +72,7 @@ public class ShipmentService {
 		return storeShipment.getShipmentId();
 	}
 	
+	@Transactional
 	public Integer createSupplierShipment(SupplierShipmentPOJO supplierShipmentPojo) {
 		Shipment shipment = supplierShipmentPojo.getShipmentDetails();
 		shipment = this.shipmentRepo.save(shipment);
@@ -157,6 +160,7 @@ public class ShipmentService {
 		saveStoreShipmentMerchandise(shipment.getRecepientStoreId(), shipment.getShipmentId(), storeShipmentPojo.getShipmentMerchDetails());
 	}
 	
+	@Transactional
 	public void updateSupplierShipment(int id, SupplierShipmentPOJO supplierShipmentPojo) {
 		Shipment shipment = supplierShipmentPojo.getShipmentDetails();
 		if(shipment.getShipmentId() != null && shipment.getShipmentId() != id) {
