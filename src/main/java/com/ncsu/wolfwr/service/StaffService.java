@@ -10,12 +10,14 @@ import com.ncsu.wolfwr.entity.Cashier;
 import com.ncsu.wolfwr.entity.Manager;
 import com.ncsu.wolfwr.entity.RegistrationOperator;
 import com.ncsu.wolfwr.entity.Staff;
+import com.ncsu.wolfwr.entity.Store;
 import com.ncsu.wolfwr.entity.WarehouseOperator;
 import com.ncsu.wolfwr.repository.BillingOperatorRepository;
 import com.ncsu.wolfwr.repository.CashierRepository;
 import com.ncsu.wolfwr.repository.ManagerRepository;
 import com.ncsu.wolfwr.repository.RegistrationOperatorRepository;
 import com.ncsu.wolfwr.repository.StaffRepository;
+import com.ncsu.wolfwr.repository.StoreRepository;
 import com.ncsu.wolfwr.repository.WarehouseOperatorRepository;
 
 @Service
@@ -27,9 +29,10 @@ public class StaffService {
 	BillingOperatorRepository billingRepo;
 	RegistrationOperatorRepository registrationRepo;
 	WarehouseOperatorRepository warehouseRepo;
+	StoreRepository storeRepo;
 	
 	@Autowired
-	StaffService(StaffRepository staffRepo, CashierRepository cashierRepo, ManagerRepository managerRepo, 
+	StaffService(StaffRepository staffRepo, CashierRepository cashierRepo, ManagerRepository managerRepo, StoreRepository storeRepo,
 			BillingOperatorRepository billingRepo, RegistrationOperatorRepository registrationRepo, WarehouseOperatorRepository warehouseRepo) {
 		this.staffRepo = staffRepo;
 		this.cashierRepo = cashierRepo;
@@ -37,6 +40,7 @@ public class StaffService {
 		this.billingRepo = billingRepo;
 		this.registrationRepo = registrationRepo;
 		this.warehouseRepo = warehouseRepo;
+		this.storeRepo = storeRepo;
 	}
 	
 	public Staff getStaffById(int staffId) {
@@ -56,6 +60,10 @@ public class StaffService {
 			Manager manager = new Manager();
 			manager.setStaffId(staff.getStaffId());
 			this.managerRepo.save(manager);
+			
+			Store store = storeRepo.findById(staff.getStoreId()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
+			store.setManagerId(staff.getStaffId());
+			this.storeRepo.save(store);
 		}else if(staff.getJobTitle().equalsIgnoreCase("Warehouse")) {
 			WarehouseOperator warehouse = new WarehouseOperator();
 			warehouse.setStaffId(staff.getStaffId());
