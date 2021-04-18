@@ -166,9 +166,10 @@ public class ShipmentService {
 	
 	public void updateStoreShipment(int id, StoreShipmentPOJO storeShipmentPojo) {
 		Shipment shipment = storeShipmentPojo.getShipmentDetails();
-		if(shipment.getShipmentId() != id) {
+		if(shipment.getShipmentId() != null && shipment.getShipmentId() != id) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mismatching Shipment Id");
 		}
+		shipment.setShipmentId(id);
 		shipment = this.shipmentRepo.save(shipment);
 		StoreShipment storeShipment = new StoreShipment(storeShipmentPojo);
 		storeShipment = this.storeShipmentRepo.save(storeShipment);
@@ -177,9 +178,10 @@ public class ShipmentService {
 	
 	public void updateSupplierShipment(int id, SupplierShipmentPOJO supplierShipmentPojo) {
 		Shipment shipment = supplierShipmentPojo.getShipmentDetails();
-		if(shipment.getShipmentId() != id) {
+		if(shipment.getShipmentId() != null && shipment.getShipmentId() != id) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "mismatching Shipment Id");
 		}
+		shipment.setShipmentId(id);
 		shipment = this.shipmentRepo.save(shipment);
 		SupplierShipment supplierShipment = new SupplierShipment(supplierShipmentPojo);
 		supplierShipment = this.supplierShipmentRepo.save(supplierShipment);
