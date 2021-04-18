@@ -8,15 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.ncsu.wolfwr.entity.BillingInfo;
 import com.ncsu.wolfwr.entity.Merchandise;
 import com.ncsu.wolfwr.entity.Shipment;
 import com.ncsu.wolfwr.entity.ShipmentContainsProduct;
 import com.ncsu.wolfwr.entity.ShipmentProductId;
-import com.ncsu.wolfwr.entity.Staff;
 import com.ncsu.wolfwr.entity.StoreShipment;
 import com.ncsu.wolfwr.entity.SupplierShipment;
-import com.ncsu.wolfwr.repository.BillingInfoRepository;
 import com.ncsu.wolfwr.repository.MerchandiseRepository;
 import com.ncsu.wolfwr.repository.ShipmentContainsProductRepository;
 import com.ncsu.wolfwr.repository.ShipmentRepository;
@@ -35,7 +32,7 @@ public class ShipmentService {
 	
 	StoreShipmentRepository storeShipmentRepo;
 	
-	BillingInfoRepository billingRepo;
+	BillingService billingService;
 	
 	SupplierShipmentRepository supplierShipmentRepo;
 	
@@ -48,13 +45,13 @@ public class ShipmentService {
 	MerchandiseService merchService;
 	
 	@Autowired
-	ShipmentService(ShipmentRepository shipmentRepo, StoreShipmentRepository storeShipmentRepo, SupplierShipmentRepository supplierShipmentRepo, MerchandiseRepository merchandiseRepo, ShipmentContainsProductRepository shipmentContainsProductRepo, BillingInfoRepository billingRepo, MerchandiseService merchService, StaffRepository staffRepo) {
+	ShipmentService(ShipmentRepository shipmentRepo, StoreShipmentRepository storeShipmentRepo, SupplierShipmentRepository supplierShipmentRepo, MerchandiseRepository merchandiseRepo, ShipmentContainsProductRepository shipmentContainsProductRepo, BillingService billingService, MerchandiseService merchService, StaffRepository staffRepo) {
 		this.shipmentRepo = shipmentRepo;
 		this.storeShipmentRepo = storeShipmentRepo;
 		this.supplierShipmentRepo = supplierShipmentRepo;
 		this.merchandiseRepo = merchandiseRepo;
 		this.shipmentContainsProductRepo = shipmentContainsProductRepo;
-		this.billingRepo =  billingRepo;
+		this.billingService =  billingService;
 		this.merchService = merchService;
 		this.staffRepo = staffRepo;
 	}
@@ -80,7 +77,7 @@ public class ShipmentService {
 		supplierShipment.setShipmentId(shipment.getShipmentId());
 		supplierShipment = this.supplierShipmentRepo.save(supplierShipment);
 		saveSupplierShipmentProducts(supplierShipmentPojo.getSupplierId(), shipment, supplierShipmentPojo.getProductsList());
-		generateBill(shipment.getRecepientStoreId(), shipment.getShipmentId(), supplierShipmentPojo.getProductsList());
+		this.billingService.generateBill(shipment.getRecepientStoreId(), shipment.getShipmentId(), supplierShipmentPojo.getProductsList());
 		return supplierShipment.getShipmentId();
 	}
 	
@@ -112,34 +109,6 @@ public class ShipmentService {
 			createOrUpdateMerchandiseOnStoreShipment(receivingStoreId, merch, merchDetails.getQuantity());
 		});
 		this.shipmentContainsProductRepo.saveAll(shipmentProducts);
-	}
-	
-	private void generateBill(int receivingStoreId, int shipmentId, List<ShipmentProductDetails> products) {
-		BillingInfo bill = new BillingInfo();
-		bill.setPaymentStatus(false);
-		bill.setShipmentId(shipmentId);
-		List<Staff> billingOps = staffRepo.getBillingOperatorByStore(receivingStoreId);
-		if (billingOps.isEmpty()) {
-			bill.setStaffId(null);			
-		} else {
-			bill.setStaffId(billingOps.get(0).getStaffId());
-		}
-		float amount = (float) 0.0;
-		for (ShipmentProductDetails product: products) {
-			amount += product.getBuyPrice()*product.getQuantity();
-		}
-		bill.setAmount(amount);
-		billingRepo.save(bill);
-	}
-	
-	private void updateBill(int shipmentId, List<ShipmentProductDetails> products) {
-		BillingInfo bill = billingRepo.findByShipmentId(shipmentId).orElseThrow();
-		float amount = (float) 0.0;
-		for (ShipmentProductDetails product: products) {
-			amount += product.getBuyPrice()*product.getQuantity();
-		}
-		bill.setAmount(amount);
-		billingRepo.save(bill);
 	}
 	
 	private void createOrUpdateMerchandiseOnSupplierShipment(Integer receivingStoreId, Integer supplierId, ShipmentProductDetails product) {
@@ -197,7 +166,7 @@ public class ShipmentService {
 		shipment = this.shipmentRepo.save(shipment);
 		SupplierShipment supplierShipment = new SupplierShipment(supplierShipmentPojo);
 		supplierShipment = this.supplierShipmentRepo.save(supplierShipment);
-		updateBill(shipment.getShipmentId(), supplierShipmentPojo.getProductsList());
+		this.billingService.updateBill(shipment.getShipmentId(), supplierShipmentPojo.getProductsList());
 		saveSupplierShipmentProductsOnUpdate(supplierShipmentPojo.getSupplierId(), shipment, supplierShipmentPojo.getProductsList());
 	}
 	
