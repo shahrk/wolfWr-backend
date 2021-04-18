@@ -31,7 +31,7 @@ public class CustomerService {
 	}
 	
 	public Integer createCustomer(Customer customer) {
-		if (customer.getCustomerId() != null || !BasicUtils.isEmpty(customer.getMembershipLevel())) {
+		if (customer.getCustomerId() != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
 		
@@ -39,16 +39,6 @@ public class CustomerService {
 			customer.setRewardPoints((float) 0);
 		}
 		
-		if(!BasicUtils.isEmpty(customer.getMembershipLevel())) {
-			
-			MembershipTier membershipObj = membershipTierRepo.findMembershipByName(customer.getMembershipLevel());
-
-			if(!BasicUtils.isEmpty(membershipObj)) {
-				customer.setTierId(membershipObj.getTierId());
-			}else {
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-			}
-		}
 		customer = this.customerRepo.save(customer);
 		
 		return customer.getCustomerId();

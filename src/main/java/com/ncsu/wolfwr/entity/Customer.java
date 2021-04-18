@@ -55,8 +55,5 @@ public class Customer implements Serializable{
 	@Column(name = "membership_amount_paid",columnDefinition = "bool")
 	private Boolean membershipAmountPaid;
 	
-	@Transient
-	private String membershipLevel;
-	
 	
 }
