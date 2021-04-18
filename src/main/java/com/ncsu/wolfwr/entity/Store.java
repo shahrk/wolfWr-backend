@@ -28,6 +28,8 @@ public class Store implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer storeId;
 	
+	private Integer managerId;
+	
 	@Column
 	private String address;
 	

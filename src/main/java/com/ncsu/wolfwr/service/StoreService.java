@@ -18,7 +18,7 @@ public class StoreService {
 		this.storeRepo = storeRepo;
 	}
 	
-	public Store getStoreById(Integer storeId) {
+	public Store getStoreById(int storeId) {
 		return storeRepo.findById(storeId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 	
@@ -31,7 +31,7 @@ public class StoreService {
 		return store.getStoreId();
 	}
 	
-	public void updateStore(Integer id, Store store) {
+	public void updateStore(int id, Store store) {
 		if (store.getStoreId() != null && store.getStoreId() != id) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
@@ -41,7 +41,7 @@ public class StoreService {
 		this.storeRepo.save(store);
 	}
 	
-	public void deleteStore(Integer id) {
+	public void deleteStore(int id) {
 		this.storeRepo.deleteById(id);
 	}
 }
