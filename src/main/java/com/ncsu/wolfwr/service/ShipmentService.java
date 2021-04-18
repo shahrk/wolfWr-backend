@@ -12,6 +12,7 @@ import com.ncsu.wolfwr.entity.BillingInfo;
 import com.ncsu.wolfwr.entity.Merchandise;
 import com.ncsu.wolfwr.entity.Shipment;
 import com.ncsu.wolfwr.entity.ShipmentContainsProduct;
+import com.ncsu.wolfwr.entity.ShipmentProductId;
 import com.ncsu.wolfwr.entity.Staff;
 import com.ncsu.wolfwr.entity.StoreShipment;
 import com.ncsu.wolfwr.entity.SupplierShipment;
@@ -23,8 +24,8 @@ import com.ncsu.wolfwr.repository.StaffRepository;
 import com.ncsu.wolfwr.repository.StoreShipmentRepository;
 import com.ncsu.wolfwr.repository.SupplierShipmentRepository;
 
-import models.ShipmentProductDetails;
 import models.ShipmentMerchDetails;
+import models.ShipmentProductDetails;
 import models.StoreShipmentPOJO;
 import models.SupplierShipmentPOJO;
 
@@ -87,6 +88,17 @@ public class ShipmentService {
 		List<ShipmentContainsProduct> shipmentProducts = new ArrayList<ShipmentContainsProduct>();
 		products.stream().forEach((product) -> {
 			shipmentProducts.add(new ShipmentContainsProduct(shipment.getShipmentId(), product));
+			createOrUpdateMerchandiseOnSupplierShipment(shipment.getRecepientStoreId(), supplierId, product);
+		});
+		this.shipmentContainsProductRepo.saveAll(shipmentProducts);
+	}
+	
+	private void saveSupplierShipmentProductsOnUpdate(int supplierId, Shipment shipment, List<ShipmentProductDetails> products) {
+		List<ShipmentContainsProduct> shipmentProducts = new ArrayList<ShipmentContainsProduct>();
+		products.stream().forEach((product) -> {
+			ShipmentProductId spId = new ShipmentProductId(shipment.getShipmentId(), product.getProductId());
+			shipmentProducts.add(new ShipmentContainsProduct(shipment.getShipmentId(), product));
+			this.shipmentContainsProductRepo.findById(spId).ifPresent((shipmentProduct)->product.setQuantity(product.getQuantity() - shipmentProduct.getQuantity()));
 			createOrUpdateMerchandiseOnSupplierShipment(shipment.getRecepientStoreId(), supplierId, product);
 		});
 		this.shipmentContainsProductRepo.saveAll(shipmentProducts);
@@ -185,8 +197,8 @@ public class ShipmentService {
 		shipment = this.shipmentRepo.save(shipment);
 		SupplierShipment supplierShipment = new SupplierShipment(supplierShipmentPojo);
 		supplierShipment = this.supplierShipmentRepo.save(supplierShipment);
-		saveSupplierShipmentProducts(supplierShipmentPojo.getSupplierId(), shipment, supplierShipmentPojo.getProductsList());
 		updateBill(shipment.getShipmentId(), supplierShipmentPojo.getProductsList());
+		saveSupplierShipmentProductsOnUpdate(supplierShipmentPojo.getSupplierId(), shipment, supplierShipmentPojo.getProductsList());
 	}
 	
 	public void deleteShipment(int id) {
