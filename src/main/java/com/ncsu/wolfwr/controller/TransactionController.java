@@ -34,7 +34,7 @@ public class TransactionController {
 	}
 	
 	@PutMapping("/{id}")
-	public void updateProduct(@PathVariable("id") Integer transactionId, @RequestBody Transaction transaction) {
+	public void updateProduct(@PathVariable("id") Integer transactionId, @RequestBody TransactionPOJO transaction) {
 		transactionService.updateTransaction(transactionId, transaction);
 	}
 	

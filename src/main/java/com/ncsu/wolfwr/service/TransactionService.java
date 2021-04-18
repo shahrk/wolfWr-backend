@@ -59,9 +59,7 @@ public class TransactionService {
 		if (transactionObj.getTransactionDetails().getTransactionId() != null) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
-		
-		Date currentDate = new Date();
-		
+				
 		float sum = 0;
 		Transaction transaction = transactionObj.getTransactionDetails();
 		transaction.setPaymentMethod(PaymentMethod.Card);
@@ -110,14 +108,60 @@ public class TransactionService {
 		return transaction.getTransactionId();
 	}
 	
-	public void updateTransaction(int id, Transaction transaction) {
-		if (transaction.getTransactionId() != null && transaction.getTransactionId() != id) {
+	public void updateTransaction(int id, TransactionPOJO transactionObj) {
+		if (transactionObj.getTransactionDetails().getTransactionId() != null && transactionObj.getTransactionDetails().getTransactionId() != id) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
 		if (!this.transactionRepo.existsById(id)) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
-		this.transactionRepo.save(transaction);
+		
+		float sum = 0;
+		Transaction transaction = transactionObj.getTransactionDetails();
+		Float prevReward = transaction.getCashbackReward();
+		
+		transaction = this.transactionRepo.save(transaction);
+		
+		for(TransactionMerchandiseDetails merchDetails : transactionObj.getMerchList()) {
+			
+			Merchandise merch = merchandiseRepo.findById(merchDetails.getMerchandiseId()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
+			//Calculating total price to be saved in transaction table with discount
+			Discount discount = discountRepo.findDiscountByProductId(merch.getProductId());
+			float discounted_price = merch.getMarketPrice();
+			if((!BasicUtils.isEmpty(discount))) {
+				discounted_price = (100 - discount.getDiscountPercentage()) / 100 * merch.getMarketPrice();
+			}
+			sum += discounted_price * merchDetails.getQuantity();
+			
+			//update the quantity of the merchandise and transactionContainsMerch table of every product
+			TransactionContainsMerchandise transactionContainsMerch = transactionContainsMerchandiseRepo.getMerchandiseByIds(transaction.getTransactionId(),merchDetails.getMerchandiseId());
+			
+			int prevQuantity = transactionContainsMerch.getQuantity();
+			merchandiseRepo.updateMerchandiseOnTransaction(merchDetails.getQuantity()-prevQuantity,merchDetails.getMerchandiseId());
+			
+			
+			transactionContainsMerch.setDiscountedPrice(discounted_price);
+			transactionContainsMerch.setQuantity(merchDetails.getQuantity());
+			this.transactionContainsMerchandiseRepo.save(transactionContainsMerch);
+			
+		}
+		
+		//Get TierId from customer Id
+		//Get Tier Name from TierId
+		Optional<Customer> customer = customerRepo.findById(transaction.getCustomerId());
+		Optional<MembershipTier> memberType = membershipTierRepo.findById(customer.orElseThrow().getTierId());
+		
+		
+		transaction.setTotalPrice(sum);
+		if(memberType.orElseThrow().getTierName().equalsIgnoreCase("Platinum")) {
+			transaction.setCashbackReward((float) (sum*0.02));
+			
+			//Update reward point in customer table
+			customerRepo.updateRewardPointsOnTransaction((float) (sum*0.02) - prevReward,transaction.getCustomerId());
+		}
+		
+		transaction = this.transactionRepo.save(transaction);
+		
 	}
 	
 	public void deleteTransaction(int id) {
