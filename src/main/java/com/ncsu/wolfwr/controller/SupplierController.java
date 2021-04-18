@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ncsu.wolfwr.entity.Supplier;
@@ -42,11 +41,5 @@ public class SupplierController {
 	public ResponseEntity<?> deleteSupplier(@PathVariable("id") Integer supplierId) {
 		supplierService.deleteSupplier(supplierId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	}
-	
-	@GetMapping("/{id}/pendingpayment")
-	public ResponseEntity<Float> getPendingPayment(@PathVariable("id") Integer supplierId, @RequestParam Integer storeId) {
-		Float pendingPayment = supplierService.getPendingPayment(supplierId, storeId);
-		return new ResponseEntity<Float>(pendingPayment, HttpStatus.OK);
 	}
 }
