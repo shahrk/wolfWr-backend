@@ -4,13 +4,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import models.ProductsDetailsJSON;
+import models.ShipmentProductDetails;
 
 @Entity
 @Data
-@NoArgsConstructor
+@AllArgsConstructor
 @IdClass(ShipmentProductId.class)
 public class ShipmentContainsProduct {
 
@@ -22,9 +22,10 @@ public class ShipmentContainsProduct {
 	
 	private Integer quantity;
 	
-	public ShipmentContainsProduct(Integer shipmentId, ProductsDetailsJSON productDetails) {
+	public ShipmentContainsProduct(Integer shipmentId, ShipmentProductDetails productDetails) {
 		this.shipmentId = shipmentId;
 		this.productId = productDetails.getProductId();
 		this.quantity = productDetails.getQuantity();
 	}
+	
 }

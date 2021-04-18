@@ -43,4 +43,15 @@ public class SupplierService {
 	public void deleteSupplier(int id) {
 		this.supplierRepo.deleteById(id);
 	}
+	
+	public float getPendingPayment(int supplierId, Integer storeId) {
+		float pendingPayment = (float) 0.0;
+		if (storeId == null) {
+			// pending payment for wolfwr
+			
+		} else {
+			// pending payment for store
+		}
+		return pendingPayment;
+	}
 }

@@ -11,5 +11,5 @@ public class SupplierShipmentPOJO {
 	
 	private Shipment shipmentDetails;
 	private Integer supplierId;
-	private List<ProductsDetailsJSON> productsList;
+	private List<ShipmentProductDetails> productsList;
 }

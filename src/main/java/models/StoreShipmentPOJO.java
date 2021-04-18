@@ -14,5 +14,5 @@ public class StoreShipmentPOJO {
 	private Integer senderStoreId;
 	private Integer senderWarehouseCheckerId;
 	private Date shipmentDate;
-	private List<ProductsDetailsJSON> productsList;
+	private List<ShipmentMerchDetails> shipmentMerchDetails;
 }

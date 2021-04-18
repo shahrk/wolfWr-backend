@@ -1,5 +1,6 @@
 package com.ncsu.wolfwr.repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,4 +31,7 @@ public interface MerchandiseRepository extends JpaRepository<Merchandise, Intege
 	@Modifying(clearAutomatically = true)
 	@Query("UPDATE Merchandise m SET m.quantityInStock= m.quantityInStock + :quantity  WHERE m.merchandiseId = :merchId")
 	void addMerchandiseStock(@Param(value = "merchId") Integer merchId, @Param(value = "quantity") Integer quantity);
+	
+	@Query("SELECT Merchandise m where m.productId = :productId and m.storeId = :storeId and m.buyPrice = :buyPrice and m.marketPrice = :marketPrice and m.productionDate = :productionDate and m.expirationDate = :expirationDate and m.supplierId = :supplierId")
+	Merchandise getMatchingMerchandise(@Param("productId") Integer productId, @Param("storeId") Integer storeId, @Param("buyPrice") Float buyPrice, @Param("marketPrice") Float marketPrice, @Param("productionDate") Date productionDate, @Param("expirationDate") Date expirationDate, @Param("supplierId") Integer supplierId);
 }
