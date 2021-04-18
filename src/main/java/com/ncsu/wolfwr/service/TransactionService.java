@@ -74,7 +74,7 @@ public class TransactionService {
 			//Calculating total price to be saved in transaction table with discount
 			Discount discount = discountRepo.findDiscountByProductId(merch.getProductId());
 			float discounted_price = merch.getMarketPrice();
-			if((!BasicUtils.isEmpty(discount)) && (discount.getDiscountStartDate().getTime() <=  currentDate.getTime()) && (discount.getDiscountExpirationDate().getTime() >= currentDate.getTime())) {
+			if((!BasicUtils.isEmpty(discount))) {
 				discounted_price = (100 - discount.getDiscountPercentage()) / 100 * merch.getMarketPrice();
 			}
 			sum += discounted_price * merchDetails.getQuantity();

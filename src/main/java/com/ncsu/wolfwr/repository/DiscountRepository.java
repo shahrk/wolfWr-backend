@@ -16,6 +16,6 @@ public interface DiscountRepository extends JpaRepository<Discount, Integer>{
 	
 	Optional<Discount> findById(Integer discountId);
 	
-	@Query("SELECT u FROM Discount u WHERE u.productId = ?1")
+	@Query("SELECT u FROM Discount u WHERE u.productId = ?1 and discountStartDate <= CURRENT_DATE and discountExpirationDate >= CURRENT_DATE")
 	Discount findDiscountByProductId(Integer productId);
 }
