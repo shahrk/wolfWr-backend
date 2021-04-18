@@ -3,14 +3,18 @@ package com.ncsu.wolfwr.entity;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import models.ShipmentProductDetails;
 
-@Entity
 @Data
+@Entity
+@NoArgsConstructor
 @AllArgsConstructor
+@Table
 @IdClass(ShipmentProductId.class)
 public class ShipmentContainsProduct {
 
