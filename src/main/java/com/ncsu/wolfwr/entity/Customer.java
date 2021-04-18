@@ -49,8 +49,8 @@ public class Customer implements Serializable{
 	@Column(name = "membership_status",columnDefinition = "bool")
 	private Boolean membershipStatus;
 	
-	@Column(name = "rewards_points",columnDefinition = "float4")
-	private Float rewardsPoints;
+	@Column(name = "reward_points",columnDefinition = "float4")
+	private Float rewardPoints;
 	
 	@Column(name = "membership_amount_paid",columnDefinition = "bool")
 	private Boolean membershipAmountPaid;

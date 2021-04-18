@@ -35,8 +35,8 @@ public class CustomerService {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
 		
-		if(BasicUtils.isEmpty(customer.getRewardsPoints())) {
-			customer.setRewardsPoints((float) 0);
+		if(BasicUtils.isEmpty(customer.getRewardPoints())) {
+			customer.setRewardPoints((float) 0);
 		}
 		
 		if(!BasicUtils.isEmpty(customer.getMembershipLevel())) {
