@@ -66,6 +66,7 @@ public class ShipmentService {
 		Shipment shipment = storeShipmentPojo.getShipmentDetails();
 		shipment = this.shipmentRepo.save(shipment);
 		StoreShipment storeShipment = new StoreShipment(storeShipmentPojo);
+		storeShipment.setShipmentId(shipment.getShipmentId());
 		storeShipment = this.storeShipmentRepo.save(storeShipment);
 		saveStoreShipmentMerchandise(shipment.getRecepientStoreId(), shipment.getShipmentId(), storeShipmentPojo.getShipmentMerchDetails());
 		return storeShipment.getShipmentId();
