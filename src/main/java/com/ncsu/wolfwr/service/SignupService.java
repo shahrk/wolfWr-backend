@@ -25,7 +25,7 @@ public class SignupService {
 		this.customerRepo = customerRepo;
 	}
 	
-	public SignupInformation getSignupById(Integer signupId) {
+	public SignupInformation getSignupById(int signupId) {
 		return signupRepo.findById(signupId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 	
@@ -40,7 +40,7 @@ public class SignupService {
 		return signup.getSignupId();
 	}
 	
-	public void updateSignup(Integer id, SignupInformation signup) {
+	public void updateSignup(int id, SignupInformation signup) {
 		if (signup.getSignupId() != null && signup.getSignupId() != id) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
@@ -50,7 +50,7 @@ public class SignupService {
 		this.signupRepo.save(signup);
 	}
 	
-	public void deleteSignup(Integer id) {
+	public void deleteSignup(int id) {
 		this.signupRepo.deleteById(id);
 	}
 

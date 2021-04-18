@@ -17,7 +17,7 @@ public class MembershipTierService {
 		this.membershipTierRepo = membershipTierRepo;
 	}
 	
-	public MembershipTier getMembershipTierById(Integer membershipTierId) {
+	public MembershipTier getMembershipTierById(int membershipTierId) {
 		return membershipTierRepo.findById(membershipTierId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 	
@@ -30,7 +30,7 @@ public class MembershipTierService {
 		return membershipTier.getTierId();
 	}
 	
-	public void updateMembershipTier(Integer id, MembershipTier membershipTier) {
+	public void updateMembershipTier(int id, MembershipTier membershipTier) {
 		if (membershipTier.getTierId() != null && membershipTier.getTierId() != id) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
@@ -40,7 +40,7 @@ public class MembershipTierService {
 		this.membershipTierRepo.save(membershipTier);
 	}
 	
-	public void deleteMembershipTier(Integer id) {
+	public void deleteMembershipTier(int id) {
 		this.membershipTierRepo.deleteById(id);
 	}
 	

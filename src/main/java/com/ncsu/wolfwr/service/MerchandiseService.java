@@ -17,7 +17,7 @@ public class MerchandiseService {
 		this.merchandiseRepo = merchandiseRepo;
 	}
 	
-	public Merchandise getMerchandiseById(Integer merchandiseId) {
+	public Merchandise getMerchandiseById(int merchandiseId) {
 		return merchandiseRepo.findById(merchandiseId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 	
@@ -30,7 +30,7 @@ public class MerchandiseService {
 		return merchandise.getMerchandiseId();
 	}
 	
-	public void updateMerchandise(Integer id, Merchandise merchandise) {
+	public void updateMerchandise(int id, Merchandise merchandise) {
 		if (merchandise.getMerchandiseId() != null && merchandise.getMerchandiseId() != id) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
@@ -40,7 +40,7 @@ public class MerchandiseService {
 		this.merchandiseRepo.save(merchandise);
 	}
 	
-	public void deleteMerchandise(Integer id) {
+	public void deleteMerchandise(int id) {
 		this.merchandiseRepo.deleteById(id);
 	}
 }

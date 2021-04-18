@@ -17,7 +17,7 @@ public class DiscountService {
 		this.discountRepo = discountRepo;
 	}
 	
-	public Discount getDiscountById(Integer discountId) {
+	public Discount getDiscountById(int discountId) {
 		return discountRepo.findById(discountId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 	
@@ -30,7 +30,7 @@ public class DiscountService {
 		return discount.getDiscountId();
 	}
 	
-	public void updateDiscount(Integer id, Discount discount) {
+	public void updateDiscount(int id, Discount discount) {
 		if (discount.getDiscountId() != null && discount.getDiscountId() != id) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
@@ -40,7 +40,7 @@ public class DiscountService {
 		this.discountRepo.save(discount);
 	}
 	
-	public void deleteDiscount(Integer id) {
+	public void deleteDiscount(int id) {
 		this.discountRepo.deleteById(id);
 	}
 }

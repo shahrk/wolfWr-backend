@@ -43,7 +43,7 @@ public class ShipmentService {
 		this.shipmentContainsProductRepo = shipmentContainsProductRepo; 
 	}
 	
-	public Shipment getShipmentById(Integer shipmentId) {
+	public Shipment getShipmentById(int shipmentId) {
 		return shipmentRepo.findById(shipmentId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 	
@@ -65,7 +65,7 @@ public class ShipmentService {
 		return supplierShipment.getShipmentId();
 	}
 	
-	private void saveShipmentProducts(Integer shipmentId, List<ProductsDetailsJSON> products) {
+	private void saveShipmentProducts(int shipmentId, List<ProductsDetailsJSON> products) {
 		List<ShipmentContainsProduct> shipmentProducts = new ArrayList<ShipmentContainsProduct>();
 		products.stream().forEach((product) -> {
 			shipmentProducts.add(new ShipmentContainsProduct(shipmentId, product));
@@ -78,7 +78,7 @@ public class ShipmentService {
 		merchandiseRepo.addMerchandiseStock(product.getMerchandiseId(), product.getQuantity());
 	}
 	
-	public void updateStoreShipment(Integer id, StoreShipmentPOJO storeShipmentPojo) {
+	public void updateStoreShipment(int id, StoreShipmentPOJO storeShipmentPojo) {
 		Shipment shipment = storeShipmentPojo.getShipmentDetails();
 		shipment = this.shipmentRepo.save(shipment);
 		StoreShipment storeShipment = new StoreShipment(storeShipmentPojo);
@@ -86,7 +86,7 @@ public class ShipmentService {
 		saveShipmentProducts(shipment.getShipmentId(), storeShipmentPojo.getProductsList());
 	}
 	
-	public void updateSupplierShipment(Integer id, SupplierShipmentPOJO supplierShipmentPojo) {
+	public void updateSupplierShipment(int id, SupplierShipmentPOJO supplierShipmentPojo) {
 		Shipment shipment = supplierShipmentPojo.getShipmentDetails();
 		shipment = this.shipmentRepo.save(shipment);
 		SupplierShipment supplierShipment = new SupplierShipment(supplierShipmentPojo);
@@ -94,7 +94,7 @@ public class ShipmentService {
 		saveShipmentProducts(shipment.getShipmentId(), supplierShipmentPojo.getProductsList());
 	}
 	
-	public void deleteShipment(Integer id) {
+	public void deleteShipment(int id) {
 		this.shipmentRepo.deleteById(id);
 	}
 }

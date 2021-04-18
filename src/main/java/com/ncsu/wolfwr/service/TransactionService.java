@@ -51,7 +51,7 @@ public class TransactionService {
 		this.transactionContainsMerchandiseRepo = transactionContainsMerchandiseRepo;
 	}
 	
-	public Transaction getTransactionById(Integer transactionId) {
+	public Transaction getTransactionById(int transactionId) {
 		return transactionRepo.findById(transactionId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 	
@@ -110,7 +110,7 @@ public class TransactionService {
 		return transaction.getTransactionId();
 	}
 	
-	public void updateTransaction(Integer id, Transaction transaction) {
+	public void updateTransaction(int id, Transaction transaction) {
 		if (transaction.getTransactionId() != null && transaction.getTransactionId() != id) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
@@ -120,7 +120,7 @@ public class TransactionService {
 		this.transactionRepo.save(transaction);
 	}
 	
-	public void deleteTransaction(Integer id) {
+	public void deleteTransaction(int id) {
 		this.transactionRepo.deleteById(id);
 	}
 }

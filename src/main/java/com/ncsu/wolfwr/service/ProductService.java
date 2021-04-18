@@ -17,7 +17,7 @@ public class ProductService {
 		this.productRepo = productRepo;
 	}
 	
-	public Product getProductById(Integer productId) {
+	public Product getProductById(int productId) {
 		return productRepo.findById(productId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 	
@@ -30,7 +30,7 @@ public class ProductService {
 		return product.getProductId();
 	}
 	
-	public void updateProduct(Integer id, Product product) {
+	public void updateProduct(int id, Product product) {
 		if (product.getProductId() != null && product.getProductId() != id) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
@@ -40,7 +40,7 @@ public class ProductService {
 		this.productRepo.save(product);
 	}
 	
-	public void deleteProduct(Integer id) {
+	public void deleteProduct(int id) {
 		this.productRepo.deleteById(id);
 	}
 }

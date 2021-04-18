@@ -39,7 +39,7 @@ public class StaffService {
 		this.warehouseRepo = warehouseRepo;
 	}
 	
-	public Staff getStaffById(Integer staffId) {
+	public Staff getStaffById(int staffId) {
 		return staffRepo.findById(staffId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 	
@@ -72,7 +72,7 @@ public class StaffService {
 		return staff.getStaffId();
 	}
 	
-	public void updateStaff(Integer id, Staff staff) {
+	public void updateStaff(int id, Staff staff) {
 		if (staff.getStaffId() != null && staff.getStaffId() != id) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
@@ -82,7 +82,7 @@ public class StaffService {
 		this.staffRepo.save(staff);
 	}
 	
-	public void deleteStaff(Integer id) {
+	public void deleteStaff(int id) {
 		this.staffRepo.deleteById(id);
 	}
 }

@@ -17,7 +17,7 @@ public class SupplierService {
 		this.supplierRepo = supplierRepo;
 	}
 	
-	public Supplier getSupplierById(Integer supplierId) {
+	public Supplier getSupplierById(int supplierId) {
 		return supplierRepo.findById(supplierId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 	
@@ -30,7 +30,7 @@ public class SupplierService {
 		return supplier.getSupplierId();
 	}
 	
-	public void updateSupplier(Integer id, Supplier supplier) {
+	public void updateSupplier(int id, Supplier supplier) {
 		if (supplier.getSupplierId() != null && supplier.getSupplierId() != id) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
@@ -40,7 +40,7 @@ public class SupplierService {
 		this.supplierRepo.save(supplier);
 	}
 	
-	public void deleteSupplier(Integer id) {
+	public void deleteSupplier(int id) {
 		this.supplierRepo.deleteById(id);
 	}
 }

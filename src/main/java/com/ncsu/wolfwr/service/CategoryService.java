@@ -17,7 +17,7 @@ public class CategoryService {
 		this.categoryRepo = categoryRepo;
 	}
 	
-	public Category getCategoryById(Integer categoryId) {
+	public Category getCategoryById(int categoryId) {
 		return categoryRepo.findById(categoryId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 	
@@ -30,7 +30,7 @@ public class CategoryService {
 		return category.getProductCategoryId();
 	}
 	
-	public void updateCategory(Integer id, Category category) {
+	public void updateCategory(int id, Category category) {
 		if (category.getProductCategoryId() != null && category.getProductCategoryId() != id) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
@@ -40,7 +40,7 @@ public class CategoryService {
 		this.categoryRepo.save(category);
 	}
 	
-	public void deleteCategory(Integer id) {
+	public void deleteCategory(int id) {
 		this.categoryRepo.deleteById(id);
 	}
 }

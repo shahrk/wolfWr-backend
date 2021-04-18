@@ -26,7 +26,7 @@ public class CustomerService {
 	}
 	
 	
-	public Customer getCustomerById(Integer customerId) {
+	public Customer getCustomerById(int customerId) {
 		return customerRepo.findById(customerId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 	
@@ -54,7 +54,7 @@ public class CustomerService {
 		return customer.getCustomerId();
 	}
 	
-	public void updateCustomer(Integer id, Customer customer) {
+	public void updateCustomer(int id, Customer customer) {
 		if (customer.getCustomerId() != null && customer.getCustomerId() != id) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
@@ -64,7 +64,7 @@ public class CustomerService {
 		this.customerRepo.save(customer);
 	}
 	
-	public void deleteCustomer(Integer id) {
+	public void deleteCustomer(int id) {
 		this.customerRepo.deleteById(id);
 	}
 }
