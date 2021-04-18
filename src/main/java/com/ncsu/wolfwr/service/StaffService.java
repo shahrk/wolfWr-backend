@@ -64,15 +64,15 @@ public class StaffService {
 			Store store = storeRepo.findById(staff.getStoreId()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 			store.setManagerId(staff.getStaffId());
 			this.storeRepo.save(store);
-		}else if(staff.getJobTitle().equalsIgnoreCase("Warehouse")) {
+		}else if(staff.getJobTitle().equalsIgnoreCase("warehouse_operator")) {
 			WarehouseOperator warehouse = new WarehouseOperator();
 			warehouse.setStaffId(staff.getStaffId());
 			this.warehouseRepo.save(warehouse);
-		}else if(staff.getJobTitle().equalsIgnoreCase("Biller")) {
+		}else if(staff.getJobTitle().equalsIgnoreCase("billing_operator")) {
 			BillingOperator billing = new BillingOperator();
 			billing.setStaffId(staff.getStaffId());
 			this.billingRepo.save(billing);
-		}else if(staff.getJobTitle().equalsIgnoreCase("Registrar")) {
+		}else if(staff.getJobTitle().equalsIgnoreCase("registration_operator")) {
 			RegistrationOperator registrar = new RegistrationOperator();
 			registrar.setStaffId(staff.getStaffId());
 			this.registrationRepo.save(registrar);
