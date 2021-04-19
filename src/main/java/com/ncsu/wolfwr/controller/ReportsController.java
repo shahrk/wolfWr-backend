@@ -54,6 +54,12 @@ public class ReportsController {
 		return reportsService.inventoryProduct(productId);
 	}
 	
+	@GetMapping("/inventory/storeProduct")
+	public List<Map<Object, Object>> inventoryStoreProduct(@RequestParam(name = "storeId", required = false) Integer storeId, @RequestParam(name = "productId", required = false) Integer productId , @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate, @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+		
+		return reportsService.inventoryStoreProduct(storeId, productId, startDate, endDate);
+	}
+	
 	@GetMapping("/customer/growth")
 	public List<Map<Object, Object>> customerGrowth(@RequestParam(name = "storeId", required = false) Integer storeId, @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate, @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
 		

@@ -75,6 +75,26 @@ public class ReportsService {
 	}
 	
 	/**
+	 * @param productId 
+	 * @param storeId
+	 * @param startDate
+	 * @param endDate
+	 * @return a map of quantity of the given product in each store if the product exists in a store.
+	 */
+
+	public List<Map<Object, Object>> inventoryStoreProduct(Integer storeId, Integer productId, LocalDate startDate, LocalDate endDate) {
+		if (storeId == null && productId == null) {
+			return merchandiseRepo.getInventoryDuration(startDate, endDate);
+		} else if(storeId != null && productId == null){
+			return merchandiseRepo.getInventoryStoreDuration(storeId, startDate, endDate);
+		} else if(storeId == null && productId != null){
+			return merchandiseRepo.getInventoryProductDuration(productId, startDate, endDate);
+		} else {
+			return merchandiseRepo.getInventoryStoreProductDuration(storeId,productId, startDate, endDate);
+		}
+	}
+	
+	/**
 	 * @param startDate
 	 * @param endDate
 	 * @return sum of all the customers before start_date, sum of all the customers before end date

@@ -1,5 +1,6 @@
 package com.ncsu.wolfwr.repository;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -42,4 +43,25 @@ public interface MerchandiseRepository extends JpaRepository<Merchandise, Intege
 	
 	@Query(value="select m.product_id, m.store_id, sum(m.quantity_in_stock) as quantity_in_stock from merchandise m group by m.product_id,m.store_id having m.product_id= :productId", nativeQuery=true)
 	List<Map<Object, Object>> getInventoryProduct(@Param("productId") Integer productId);
+	
+	
+	@Query(value="select m.product_id, m.store_id, sum(m.quantity_in_stock) as quantity_in_stock from merchandise m where "
+			+ " ((m.production_date < :startDate and m.expiration_date > :startDate) || (m.production_date < :endDate and m.expiration_date > :endDate) || (m.production_date > :startDate and m.expiration_date < :endDate))  "
+			+ " group by m.product_id,m.store_id", nativeQuery=true)
+	List<Map<Object, Object>> getInventoryDuration(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+	
+	@Query(value="select m.product_id, m.store_id, sum(m.quantity_in_stock) as quantity_in_stock from merchandise m where m.store_id = :storeId and "
+			+ " ((m.production_date < :startDate and m.expiration_date > :startDate) || (m.production_date < :endDate and m.expiration_date > :endDate) || (m.production_date > :startDate and m.expiration_date < :endDate))  "
+			+ " group by m.product_id,m.store_id", nativeQuery=true)
+	List<Map<Object, Object>> getInventoryStoreDuration(@Param("storeId") Integer storeId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+	
+	@Query(value="select m.product_id, m.store_id, sum(m.quantity_in_stock) as quantity_in_stock from merchandise m where m.product_id = :productId and "
+			+ " ((m.production_date < :startDate and m.expiration_date > :startDate) || (m.production_date < :endDate and m.expiration_date > :endDate) || (m.production_date > :startDate and m.expiration_date < :endDate))  "
+			+ " group by m.product_id,m.store_id", nativeQuery=true)
+	List<Map<Object, Object>> getInventoryProductDuration(@Param("productId") Integer productId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+	
+	@Query(value="select m.product_id, m.store_id, sum(m.quantity_in_stock) as quantity_in_stock from merchandise m where m.product_id = :productId and m.store_id = :storeId and "
+			+ " ((m.production_date < :startDate and m.expiration_date > :startDate) || (m.production_date < :endDate and m.expiration_date > :endDate) || (m.production_date > :startDate and m.expiration_date < :endDate))  "
+			+ " group by m.product_id,m.store_id", nativeQuery=true)
+	List<Map<Object, Object>> getInventoryStoreProductDuration(@Param("storeId") Integer storeId, @Param("productId") Integer productId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }
