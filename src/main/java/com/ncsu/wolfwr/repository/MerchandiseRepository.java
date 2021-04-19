@@ -40,6 +40,6 @@ public interface MerchandiseRepository extends JpaRepository<Merchandise, Intege
 	@Query(value="select m.product_id, m.merchandise_id, m.expiration_date, sum(m.quantity_in_stock) as quantity_in_stock from merchandise m where m.store_id = :storeId group by m.product_id, m.merchandise_id", nativeQuery=true)
 	List<Map<Object, Object>> getInventoryStore(@Param("storeId") Integer storeId);
 	
-	@Query(value="select m.product_id, m.store_id, m.expiration_date, sum(m.quantity_in_stock) as quantity_in_stock from merchandise m group by m.product_id,m.store_id having m.product_id= :productId", nativeQuery=true)
+	@Query(value="select m.product_id, m.store_id, sum(m.quantity_in_stock) as quantity_in_stock from merchandise m group by m.product_id,m.store_id having m.product_id= :productId", nativeQuery=true)
 	List<Map<Object, Object>> getInventoryProduct(@Param("productId") Integer productId);
 }
