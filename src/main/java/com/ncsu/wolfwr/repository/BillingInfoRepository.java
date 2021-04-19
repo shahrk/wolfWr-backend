@@ -14,10 +14,10 @@ public interface BillingInfoRepository extends JpaRepository<BillingInfo, Intege
 
 	Optional<BillingInfo> findByShipmentId(Integer shipmentId);
 	
-	@Query("SELECT sum(b.amount) from SupplierShipment ss, Shipment s, BillingInfo b where ss.shipmentId = b.shipmentId and ss.shipmentId = s.shipmentId and b.paymentStatus = 0 and ss.supplierId = :supplierId and s.recepientStoreId = :storeId group by ss.supplierId")
+	@Query("SELECT sum(b.amount) from SupplierShipment ss, Shipment s, BillingInfo b where ss.shipmentId = b.shipmentId and ss.shipmentId = s.shipmentId and b.paymentStatus = 0 and ss.supplierId = :supplierId and s.recepientStoreId = :storeId")
 	Optional<Float> getSupplierPendingPaymentForStore(@Param("supplierId") int supplierId, @Param("storeId") int storeId);
 	
-	@Query("SELECT sum(b.amount) from SupplierShipment ss, Shipment s, BillingInfo b where ss.shipmentId = b.shipmentId and ss.shipmentId = s.shipmentId and b.paymentStatus = 0 and ss.supplierId = :supplierId group by ss.supplierId")
+	@Query("SELECT sum(b.amount) from SupplierShipment ss, Shipment s, BillingInfo b where ss.shipmentId = b.shipmentId and ss.shipmentId = s.shipmentId and b.paymentStatus = 0 and ss.supplierId = :supplierId")
 	Optional<Float> getSupplierPendingPayment(@Param("supplierId") int supplierId);
 	
 	@Query("SELECT sum(b.amount) from StoreShipment ss, Shipment s, BillingInfo b where ss.shipmentId = b.shipmentId and ss.shipmentId = s.shipmentId and b.paymentStatus = 0 and s.recepientStoreId = :fromStoreId and ss.senderStoreId = :toStoreId")
