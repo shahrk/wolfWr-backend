@@ -55,9 +55,9 @@ public class ReportsController {
 	}
 	
 	@GetMapping("/customer/growth")
-	public List<Map<Object, Object>> customerGrowth(@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate, @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+	public List<Map<Object, Object>> customerGrowth(@RequestParam(name = "storeId", required = false) Integer storeId, @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate, @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
 		
-		return reportsService.customerGrowth(startDate, endDate);
+		return reportsService.customerGrowth(storeId, startDate, endDate);
 	}
 	
 	@GetMapping("/customer/{id}/activity")

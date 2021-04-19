@@ -29,6 +29,13 @@ public interface SignupRepository extends JpaRepository<SignupInformation, Integ
 			+ "	(select count(*) as customer_count from signup_information s where s.signup_date <= :endDate and coalesce(s.end_date,'2100-01-01') >= :startDate) as final", nativeQuery=true)
 	List<Map<Object, Object>> getCustomerGrowth(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 	
+	@Query(value="select initial.customer_count as initial_customer_count, final.customer_count as final_customer_count, "
+			+ "	(final.customer_count - initial.customer_count)*100/initial.customer_count as growth "
+			+ "	from "
+			+ "	(select count(*) as customer_count from signup_information s where s.signup_date <= :startDate and coalesce(s.end_date,'2100-01-01') >= :startDate and s.store_id = :storeId) as initial, "
+			+ "	(select count(*) as customer_count from signup_information s where s.signup_date <= :endDate and coalesce(s.end_date,'2100-01-01') >= :startDate and s.store_id = :storeId) as final", nativeQuery=true)
+	List<Map<Object, Object>> getCustomerGrowthStore(@Param("storeId") Integer storeId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+	
 	@Transactional
 	@Modifying(clearAutomatically = true)
 	@Query("UPDATE SignupInformation s SET s.endDate= CURRENT_DATE  WHERE s.customerId = :customerId and s.endDate = null")

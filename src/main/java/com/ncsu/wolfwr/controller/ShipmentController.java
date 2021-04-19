@@ -50,7 +50,7 @@ public class ShipmentController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteProduct(@PathVariable("id") Integer shipmentId) {
+	public ResponseEntity<?> deleteShipment(@PathVariable("id") Integer shipmentId) {
 		shipmentService.deleteShipment(shipmentId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

@@ -37,7 +37,7 @@ public class BillingController {
 	}
 	
 	@GetMapping("/store")
-	public Float getStorePendingPayments(@RequestParam(name = "storeFromId", required = false) Integer storeFromId, @RequestParam(name = "storeToId", required = false) Integer storeToId) {
+	public Float getStorePendingPayments(@RequestParam(name = "storeFromId") Integer storeFromId, @RequestParam(name = "storeToId") Integer storeToId) {
 		return billingService.getStorePendingPaymentForStore(storeFromId, storeToId);
 	}
 	

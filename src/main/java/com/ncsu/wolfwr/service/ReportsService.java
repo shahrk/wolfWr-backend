@@ -80,8 +80,13 @@ public class ReportsService {
 	 * @return sum of all the customers before start_date, sum of all the customers before end date
 	 *         and growth in number of customers between the given time period.
 	 */
-	public List<Map<Object, Object>> customerGrowth(LocalDate startDate, LocalDate endDate) {
-		return signupRepo.getCustomerGrowth(startDate, endDate);
+	public List<Map<Object, Object>> customerGrowth(Integer storeId, LocalDate startDate, LocalDate endDate) {
+		if (storeId == null) {
+			return signupRepo.getCustomerGrowth(startDate, endDate);
+			
+		} else {
+			return signupRepo.getCustomerGrowthStore(storeId, startDate, endDate);
+		}
 	}
 	
 	/**
