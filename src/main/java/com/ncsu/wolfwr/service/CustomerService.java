@@ -67,12 +67,15 @@ public class CustomerService {
 	
 	/**
 	 * @param customer_id
-	 * set membership status to false for a given customer
+	 * set membership status to false for a given customer and update the endDate in signUp information table 
 	 */ 
 	public void cancelMembershio(int id) {
 		Customer customer = this.customerRepo.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 		customer.setMembershipStatus(false);
 		this.customerRepo.save(customer);
+		
+		signupRepo.cancelMembership(customer.getCustomerId());
+		
 	}
 	
 	public void deleteCustomer(int id) {
