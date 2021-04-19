@@ -36,6 +36,11 @@ public class BillingController {
 		return billingService.getSupplierPendingPayments(supplierId, storeId);
 	}
 	
+	@GetMapping("/store")
+	public Float getStorePendingPayments(@RequestParam(name = "storeFromId", required = false) Integer storeFromId, @RequestParam(name = "storeToId", required = false) Integer storeToId) {
+		return billingService.getStorePendingPaymentForStore(storeFromId, storeToId);
+	}
+	
 	@PostMapping("/")
 	public void generateBill(@RequestParam(name = "receivingStoreId") Integer receivingStoreId, @RequestParam(name = "shipmentId") Integer shipmentId,@RequestBody List<ShipmentProductDetails> products) {
 		billingService.generateBill(receivingStoreId, shipmentId, products);

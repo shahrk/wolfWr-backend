@@ -122,4 +122,10 @@ public class BillingService {
 		}
 		return pendingPayment;
 	}
+	
+	public Float getStorePendingPaymentForStore(int fromStoreId, Integer toStoreId) {
+		float pendingPayment = (float) 0.0;
+		pendingPayment = billingRepo.getStorePendingPaymentForStore(toStoreId,fromStoreId).orElse((float)0.0);
+		return pendingPayment;
+	}
 }

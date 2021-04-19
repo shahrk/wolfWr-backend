@@ -19,4 +19,7 @@ public interface BillingInfoRepository extends JpaRepository<BillingInfo, Intege
 	
 	@Query("SELECT sum(b.amount) from SupplierShipment ss, Shipment s, BillingInfo b where ss.shipmentId = b.shipmentId and ss.shipmentId = s.shipmentId and b.paymentStatus = 0 and ss.supplierId = :supplierId group by ss.supplierId")
 	Optional<Float> getSupplierPendingPayment(@Param("supplierId") int supplierId);
+	
+	@Query("SELECT sum(b.amount) from StoreShipment ss, Shipment s, BillingInfo b where ss.shipmentId = b.shipmentId and ss.shipmentId = s.shipmentId and b.paymentStatus = 0 and s.recepientStoreId = :fromStoreId and ss.senderStoreId = :toStoreId")
+	Optional<Float> getStorePendingPaymentForStore(@Param("toStoreId") int toStoreId, @Param("fromStoreId") int fromStoreId);
 }
