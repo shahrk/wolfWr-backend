@@ -1,6 +1,7 @@
 package com.ncsu.wolfwr.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,10 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.ncsu.wolfwr.entity.BillingInfo;
+import com.ncsu.wolfwr.entity.Merchandise;
 import com.ncsu.wolfwr.entity.Staff;
 import com.ncsu.wolfwr.repository.BillingInfoRepository;
+import com.ncsu.wolfwr.repository.MerchandiseRepository;
 import com.ncsu.wolfwr.repository.StaffRepository;
 
+import models.ShipmentMerchDetails;
 import models.ShipmentProductDetails;
 
 @Service
@@ -20,10 +24,13 @@ public class BillingService {
 	
 	StaffRepository staffRepo;
 	
+	MerchandiseRepository merchRepo;
+	
 	@Autowired
-	BillingService(BillingInfoRepository billingRepo, StaffRepository staffRepo) {
+	BillingService(BillingInfoRepository billingRepo, StaffRepository staffRepo, MerchandiseRepository merchRepo) {
 		this.billingRepo = billingRepo;
 		this.staffRepo = staffRepo;
+		this.merchRepo = merchRepo;
 	}
 	
 	/**
@@ -54,6 +61,26 @@ public class BillingService {
 		float amount = (float) 0.0;
 		for (ShipmentProductDetails product: products) {
 			amount += product.getBuyPrice()*product.getQuantity();
+		}
+		bill.setAmount(amount);
+		billingRepo.save(bill);
+	}
+	
+	public void generateBillStore(int receivingStoreId, int shipmentId, List<ShipmentMerchDetails> merchandiseList) {
+		BillingInfo bill = new BillingInfo();
+		bill.setPaymentStatus(false);
+		bill.setShipmentId(shipmentId);
+		List<Staff> billingOps = staffRepo.getBillingOperatorByStore(receivingStoreId);
+		if (billingOps.isEmpty()) {
+			bill.setStaffId(null);			
+		} else {
+			bill.setStaffId(billingOps.get(0).getStaffId());
+		}
+		float amount = (float) 0.0;
+		for (ShipmentMerchDetails merch: merchandiseList) {
+			Optional<Merchandise> merchandise = merchRepo.findById(merch.getMerchandiseId());
+			
+			amount += merchandise.orElseThrow().getBuyPrice()*merch.getQuantity();
 		}
 		bill.setAmount(amount);
 		billingRepo.save(bill);

@@ -77,6 +77,7 @@ public class ShipmentService {
 		storeShipment.setShipmentId(shipment.getShipmentId());
 		storeShipment = this.storeShipmentRepo.save(storeShipment);
 		saveStoreShipmentMerchandise(shipment.getRecepientStoreId(), shipment.getShipmentId(), storeShipmentPojo.getShipmentMerchDetails());
+		this.billingService.generateBillStore(shipment.getRecepientStoreId(), shipment.getShipmentId(), storeShipmentPojo.getShipmentMerchDetails());
 		return storeShipment.getShipmentId();
 	}
 	
