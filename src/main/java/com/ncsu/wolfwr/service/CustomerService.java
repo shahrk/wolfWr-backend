@@ -65,6 +65,10 @@ public class CustomerService {
 		this.customerRepo.save(customer);
 	}
 	
+	/**
+	 * @param customer_id
+	 * set membership status to false for a given customer
+	 */ 
 	public void cancelMembershio(int id) {
 		Customer customer = this.customerRepo.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 		customer.setMembershipStatus(false);
@@ -75,6 +79,10 @@ public class CustomerService {
 		this.customerRepo.deleteById(id);
 	}
 	
+	/**
+	 * @param id
+	 * @return current reward points for a customer.
+	 */
 	public float getCurrentRewardPoints(int id) {
 		Customer customer = this.customerRepo.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 		return customer.getRewardPoints();
@@ -87,6 +95,10 @@ public class CustomerService {
 		return this.customerRepo.getRewardPointsByYear(id, year).orElse((float)0.0);
 	}
 	
+	/**
+	 * @param id
+	 * reward points for the customer is reset at the end of the year.
+	 */ 
 	@Transactional
 	public void resetRewardPoints(int id) {
 		Customer customer = this.customerRepo.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));

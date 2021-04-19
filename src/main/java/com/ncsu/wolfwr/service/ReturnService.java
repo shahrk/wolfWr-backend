@@ -49,6 +49,14 @@ public class ReturnService {
 	}
 	
 	// demo this, show a create for return and show how it gets rejected in certain scenarios
+	/**
+	 * @param list of all the merchandise and quantity to be returned for a transaction
+	 * @return newly created return id and amount to be returned
+	 * 1. Create a new entry in return entity
+	 * 2. Create a new entry in return_contains_merchandise entity.
+	 * 3. Update the stock in a store for all the products in a return.
+	 * 4. Fetch the amount to be returned from the transaction and return total sum. 
+	 */
 	@Transactional
 	public ReturnResponse createReturn(ReturnPOJO returnPojo) {
 		ReturnResponse returnResp = new ReturnResponse();
@@ -82,6 +90,10 @@ public class ReturnService {
 		return returnResp;
 	}
 	
+	/**
+	 * @param list of all the merchandise and quantity to be updated for a return.
+	 * Update the stock quantity  in the store for all updated merchandises. 
+	 */ 
 	@Transactional
 	public void updateReturn(ReturnPOJO returnPojo) {
 		Returns returns = returnPojo.getReturns();

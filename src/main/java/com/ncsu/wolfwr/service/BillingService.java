@@ -26,10 +26,21 @@ public class BillingService {
 		this.staffRepo = staffRepo;
 	}
 	
+	/**
+	 * @param billId
+	 * @return billing info object.
+	 * throws not found exception if bill id is not found.
+	 */
 	public BillingInfo getBillById(int billId) {
 		return billingRepo.findById(billId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 	
+	/**
+	 * @param receivingStoreId
+	 * @param shipmentId
+	 * @param products as a list
+	 * generate a bill in billing_info once shipment is received to a store. 
+	 */ 
 	public void generateBill(int receivingStoreId, int shipmentId, List<ShipmentProductDetails> products) {
 		BillingInfo bill = new BillingInfo();
 		bill.setPaymentStatus(false);
@@ -69,6 +80,11 @@ public class BillingService {
 		this.billingRepo.deleteById(id);
 	}
 	
+	/**
+	 * @param supplierId
+	 * @param storeId
+	 * @return total sum of pending amount for a given supplier for a particular store.
+	 */
 	public Float getSupplierPendingPayments(int supplierId, Integer storeId) {
 		float pendingPayment = (float) 0.0;
 		if (storeId == null) {

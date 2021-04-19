@@ -56,6 +56,14 @@ public class TransactionService {
 		return transactionRepo.findById(transactionId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 	
+	/**
+	 * @param merchList, transactionDetails
+	 * @return transaction_id.
+	 * 1. Create new entry in transaction and transaction_contains_merchandise entities.
+	 * 2. Calculate discount for all the applicable products and sum of all discounts.
+	 * 3. Decrease quantity in stock for all the merchandises in the transaction.
+	 * 4. Check if the customer is eligible for the reward points. If eligible, update reward points in transaction.
+	 */
 	@Transactional
 	public Integer createTransaction(TransactionPOJO transactionObj) {
 		if (transactionObj.getTransactionDetails().getTransactionId() != null) {

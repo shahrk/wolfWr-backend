@@ -62,6 +62,14 @@ public class ShipmentService {
 		return shipmentRepo.findById(shipmentId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 	
+	/**
+	 * @param senderStoreId, senderWarehouseCheckerId, shipmentDate, shipmentDetails, shipmentMerchDetails
+	 * @return shipment_id.
+	 * 1. Create a new entry in shipment, store_shipment and shipment_contains_product entities.
+	 * 2. Decrease quantity in stock from sender store and increase the quantity in stock in recipient store
+	 * 	  for the shipment_contains_merchandise entity.
+	 * 3. Generate a bill with total sum to be paid to sender store.  
+	 */ 
 	public Integer createStoreShipment(StoreShipmentPOJO storeShipmentPojo) {
 		Shipment shipment = storeShipmentPojo.getShipmentDetails();
 		shipment = this.shipmentRepo.save(shipment);
@@ -72,6 +80,13 @@ public class ShipmentService {
 		return storeShipment.getShipmentId();
 	}
 	
+	/**
+	 * @param supplierId, shipmentDetails, productsList
+	 * @return shipment_id.
+	 * 1. Create a new entry in shipment, supplier_shipment and shipment_contains_product entities.
+	 * 2. Increase the quantity in stock in recipient store for the shipment_contains_merchandise entity.
+	 * 3. Generate a bill with total sum to be paid to the supplier. 
+	 */
 	@Transactional
 	public Integer createSupplierShipment(SupplierShipmentPOJO supplierShipmentPojo) {
 		Shipment shipment = supplierShipmentPojo.getShipmentDetails();
