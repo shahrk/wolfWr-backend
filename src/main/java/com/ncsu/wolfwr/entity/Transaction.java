@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,6 +45,7 @@ public class Transaction implements Serializable{
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name = "purchase_date")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="EST")
 	private Date purchaseDate;
 
 	@Column(name = "total_price",columnDefinition = "float4")

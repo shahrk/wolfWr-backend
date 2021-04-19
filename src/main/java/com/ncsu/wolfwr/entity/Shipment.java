@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Entity
@@ -24,5 +26,6 @@ public class Shipment {
 	private Integer recepientWarehouseOperatorId;
 	
 	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="EST")
 	private Date receivedDate;
 }

@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import models.StoreShipmentPOJO;
@@ -24,6 +26,7 @@ public class StoreShipment {
 	private Integer senderWarehouseCheckerId;
 	
 	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="EST")
 	private Date shipmentDate;
 	
 	public StoreShipment (StoreShipmentPOJO storeShipment) {

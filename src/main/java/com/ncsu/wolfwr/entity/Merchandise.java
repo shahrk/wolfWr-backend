@@ -12,6 +12,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,10 +37,12 @@ public class Merchandise implements Serializable{
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name = "expiration_date")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="EST")
 	private Date expirationDate;
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name = "production_date")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="EST")
 	private Date productionDate;
 	
 	@Column(name = "store_id")
