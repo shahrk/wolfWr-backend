@@ -123,9 +123,9 @@ public class BillingService {
 		return pendingPayment;
 	}
 	
-	public Float getStorePendingPaymentForStore(int fromStoreId, Integer toStoreId) {
+	public Float getStorePendingPaymentForStore(int receivingStoreId, int senderStoreId) {
 		float pendingPayment = (float) 0.0;
-		pendingPayment = billingRepo.getStorePendingPaymentForStore(toStoreId,fromStoreId).orElse((float)0.0);
+		pendingPayment = billingRepo.getStorePendingPaymentForStore(receivingStoreId, senderStoreId).orElse((float)0.0);
 		return pendingPayment;
 	}
 }
