@@ -32,5 +32,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 	
 	@Query(value="select t.customer_id, sum(t.total_price) as total_purchase_amount from transaction t where t.purchase_date between :startDate and :endDate group by t.customer_id having t.customer_id= :customerId", nativeQuery=true)
 	List<Map<Object, Object>> getCustomerActivity(@Param("customerId") Integer customerId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+	@Query("Select s from Transaction s where s.transactionId = :transactionId")
+	Transaction getTransactionById(@Param("transactionId") Integer transactionId);
 }
 

@@ -26,4 +26,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer>{
 	@Query("select sum(t.cashbackReward) as rewards from Transaction t where year(t.purchaseDate) = :year and t.customerId = :customerId")
 	Optional<Float> getRewardPointsByYear(@Param(value = "customerId") int customerId, @Param(value = "year") int year);
 	
+	@Query("Select s from Customer s where s.customerId = :customerId")
+	Customer getCustomerById(@Param("customerId") Integer customerId);
 }

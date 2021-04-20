@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -15,10 +16,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.ncsu.wolfwr.entity.Customer;
+import com.ncsu.wolfwr.entity.MembershipTier;
 import com.ncsu.wolfwr.entity.ReturnContainsMerchandise;
 import com.ncsu.wolfwr.entity.Returns;
+import com.ncsu.wolfwr.entity.Transaction;
 import com.ncsu.wolfwr.entity.TransactionContainsMerchandise;
 import com.ncsu.wolfwr.entity.TransactionMerchandiseId;
+import com.ncsu.wolfwr.repository.CustomerRepository;
+import com.ncsu.wolfwr.repository.MembershipTierRepository;
 import com.ncsu.wolfwr.repository.MerchandiseRepository;
 import com.ncsu.wolfwr.repository.ReturnContainsMerchandiseRepository;
 import com.ncsu.wolfwr.repository.ReturnRepository;
@@ -36,16 +42,20 @@ public class ReturnService {
 	TransactionRepository transactionRepo;
 	TransactionContainsMerchandiseRepository transactionContainsMerchRepo;
 	MerchandiseRepository merchRepo;
+	CustomerRepository customerRepo;
+	MembershipTierRepository membershipTierRepo;
 	
 	@Autowired
 	ReturnService(ReturnRepository returnRepo, ReturnContainsMerchandiseRepository returnContainsMerchRepo, 
 			TransactionRepository transactionRepo, TransactionContainsMerchandiseRepository transactionContainsMerchRepo,
-			MerchandiseRepository merchRepo) {
+			MerchandiseRepository merchRepo, CustomerRepository customerRepo, MembershipTierRepository membershipTierRepo) {
 		this.returnRepo = returnRepo;
 		this.returnContainsMerchRepo = returnContainsMerchRepo;
 		this.transactionRepo = transactionRepo;
 		this.transactionContainsMerchRepo = transactionContainsMerchRepo;
 		this.merchRepo = merchRepo;
+		this.customerRepo = customerRepo;
+		this.membershipTierRepo = membershipTierRepo;
 	}
 	
 	// demo this, show a create for return and show how it gets rejected in certain scenarios
@@ -87,6 +97,26 @@ public class ReturnService {
 		returnContainsMerchRepo.saveAll(returnedMerch);
 		returnResp.setReturnId(returns.getReturnId());
 		returnResp.setReturnAmount(returnAmount);
+		
+		//Get TierId from customer Id
+		//Get Tier Name from TierId
+		Transaction transactionObj = transactionRepo.getTransactionById(returns.getTransactionId());
+		
+		Customer customer = customerRepo.getCustomerById(transactionObj.getCustomerId());
+		Optional<MembershipTier> memberType = membershipTierRepo.findById(customer.getTierId());
+		
+		if(memberType.orElseThrow().getTierName().equalsIgnoreCase("Platinum")) {
+			Float prevReward = transactionObj.getCashbackReward();
+			transactionObj.setCashbackReward(prevReward - ((float) (returnAmount*0.02)));
+			transactionRepo.save(transactionObj);
+			
+			//Update reward point in customer table
+			prevReward = customer.getRewardPoints();
+			customer.setRewardPoints(prevReward + ((float) (-returnAmount*0.02)));
+			customerRepo.save(customer);
+			
+		}
+				
 		return returnResp;
 	}
 	
