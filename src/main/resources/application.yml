@@ -7,9 +7,9 @@ spring:
     rest:
       basePath: /rest
   datasource:
-    url: jdbc:mariadb://localhost:3306/wolfwr?createDatabaseIfNotExist=true
+    url: jdbc:mariadb://wolfwr.cowh7ovkjohy.us-east-2.rds.amazonaws.com:3306/wolfwr?createDatabaseIfNotExist=true
     username: root
-    password: Nirav@29
+    password: SimStudent
   jpa:
     properties:
       hibernate:
